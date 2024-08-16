@@ -14,6 +14,8 @@ blank_surf = pygame.Surface((32, 32))
 blank_surf.fill((255, 248, 231))
 wallpaper = Wallpaper(screen, {"b": blank_surf})
 
+scroll = pygame.Vector2(0, 0)
+
 while True:
 
     #screen.fill((255, 248, 231))
@@ -30,16 +32,21 @@ while True:
                     if (i*32 <= pos.x < (i+1)*32):
                         print("Colour clicked")
 
-    pygame.draw.rect(screen, (255, 0, 0), (0, 320, 32, 32))
-    pygame.draw.rect(screen, (0, 255, 0), (32, 320, 32, 32))
-    pygame.draw.rect(screen, (0, 0, 255), (64, 320, 32, 32))
-    pygame.draw.rect(screen, (255, 255, 0), (96, 320, 32, 32))
-    pygame.draw.rect(screen, (0, 255, 255), (128, 320, 32, 32))
-    pygame.draw.rect(screen, (255, 0, 255), (160, 320, 32, 32))
-    pygame.draw.rect(screen, (255, 255, 255), (192, 320, 32, 32))
-    pygame.draw.rect(screen, (0, 0, 0), (224, 320, 32, 32))
+        if event.type == pygame.MOUSEWHEEL:
+            scroll.y += 5 * event.y
+            scroll.x += 5 * event.x * -1
 
-    wallpaper.draw(pygame.Vector2(0, 0))
+    wallpaper.draw(scroll)
+
+
+    pygame.draw.rect(screen, (255, 0, 0), (0, 360, 32, 32))
+    pygame.draw.rect(screen, (0, 255, 0), (32, 360, 32, 32))
+    pygame.draw.rect(screen, (0, 0, 255), (64, 360, 32, 32))
+    pygame.draw.rect(screen, (255, 255, 0), (96, 360, 32, 32))
+    pygame.draw.rect(screen, (0, 255, 255), (128, 360, 32, 32))
+    pygame.draw.rect(screen, (255, 0, 255), (160, 360, 32, 32))
+    pygame.draw.rect(screen, (255, 255, 255), (192, 360, 32, 32))
+    pygame.draw.rect(screen, (0, 0, 0), (224, 360, 32, 32))
 
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     pygame.display.flip()

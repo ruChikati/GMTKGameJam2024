@@ -9,7 +9,7 @@ class Wallpaper:
         for i in range(16):
             temp_arr = []
             for j in range(16):
-                w = WallpaperTile(i * 32 + 1, j * 32 + 1, 32, 32)
+                w = WallpaperTile(i * 32, j * 32, 32, 32)
                 #w.status = RED
                 temp_arr.append(
                     w
