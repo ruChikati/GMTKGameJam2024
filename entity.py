@@ -12,15 +12,17 @@ class Entity:
         h: int,
         name: str,
         anims: dict[str : anim.Animation],
+        surf: pygame.Surface,
     ):
         self.rect = pygame.Rect(x, y, w, h)
         self.name = name
         self.anims = anims
         self.action = "idle"
+        self.surf = surf
 
-    def update(self, surf: pygame.Surface, dt: float):
+    def update(self, dt: float):
         self.anims[self.action].play(dt)
-        surf.blit(self.anims[self.action].get_img(), self.rect.topleft)
+        self.surf.blit(self.anims[self.action].get_img(), self.rect.topleft)
 
     def change_action(self, action: str):
         self.anims[self.action].rewind()

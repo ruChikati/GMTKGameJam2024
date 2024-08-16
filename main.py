@@ -20,7 +20,7 @@ while True:
             pos = pygame.mouse.get_pos()
             if pygame.mouse.get_pressed()[0] and (pos.y < 320):
                 for i in range(8):
-                    if (i*32 <= pos.x < (i+1)*32):
+                    if i * 32 <= pos.x < (i + 1) * 32:
                         print("Colour clicked")
 
     pygame.draw.rect(screen, (255, 0, 0), (0, 320, 32, 32))
