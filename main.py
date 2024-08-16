@@ -1,35 +1,52 @@
+import os
 import sys
+import time
 
 import pygame
 
-from wallpaper import *
+from anim import Animation
+from entity import Entity
+from wallpaper import Wallpaper
 
-display = pygame.display.set_mode((640, 360))
+display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
 
 screen = pygame.Surface((640, 360))
 clock = pygame.time.Clock()
+dt = 1.0
+last_time = time.time()
 
-blank_surf = pygame.Surface((32, 32))
-blank_surf.fill((255, 248, 231))
-wallpaper = Wallpaper(screen, {"b": blank_surf})
 
+player = Entity(
+    0, 0, 16, 16, "player", {"idle": Animation(f"anims{os.sep}player;idle")}, screen
+)
+
+tile_imgs = {}
+for file in os.listdir("tiles"):
+    if file.endswith(".png"):
+        tile_imgs[file.split(".")[0]] = pygame.image.load(
+            "tiles" + os.sep + file
+        ).convert()
+
+wallpaper = Wallpaper(screen, tile_imgs)
 scroll = pygame.Vector2(0, 0)
 
 while True:
 
-    #screen.fill((255, 248, 231))
-    screen.fill((0, 0, 0))
+    dt = (time.time() - last_time) * 60 * 10
+    last_time = time.time()
+    print(dt)
+    screen.fill((255, 248, 231))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
+            pos = pygame.Vector2(pygame.mouse.get_pos())
             if pygame.mouse.get_pressed()[0] and (pos.y < 320):
                 for i in range(8):
-                    if (i*32 <= pos.x < (i+1)*32):
+                    if i * 32 <= pos.x < (i + 1) * 32:
                         print("Colour clicked")
 
         if event.type == pygame.MOUSEWHEEL:
@@ -37,7 +54,6 @@ while True:
             scroll.x += 5 * event.x * -1
 
     wallpaper.draw(scroll)
-
 
     pygame.draw.rect(screen, (255, 0, 0), (0, 360, 32, 32))
     pygame.draw.rect(screen, (0, 255, 0), (32, 360, 32, 32))
@@ -48,6 +64,7 @@ while True:
     pygame.draw.rect(screen, (255, 255, 255), (192, 360, 32, 32))
     pygame.draw.rect(screen, (0, 0, 0), (224, 360, 32, 32))
 
+    player.update(dt)
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     pygame.display.flip()
     clock.tick()

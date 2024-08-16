@@ -19,7 +19,6 @@ class Animation:
                 "frames": [5] * len(self.frame_paths),
                 "speed": 1.0,
                 "loop": False,
-                "offset": [0, 0],
             }
             write_json(f"{self.path}{os.sep}config.json", self.config)
         self.frame_durations = sum_list(self.config["frames"])
@@ -57,8 +56,8 @@ class Animation:
         if not self.paused:
             self.frame += dt * fps * self.config["speed"]
         if self.config["loop"]:
-            while self.frame > self.duration:
-                self.frame -= self.duration
+            if self.frame > self.duration:
+                self.frame = 0
         self._calcualate_img()
         return self.frame
 

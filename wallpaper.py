@@ -10,10 +10,7 @@ class Wallpaper:
             temp_arr = []
             for j in range(16):
                 w = WallpaperTile(i * 32, j * 32, 32, 32)
-                #w.status = RED
-                temp_arr.append(
-                    w
-                )
+                temp_arr.append(w)
             self.w_tiles.append(temp_arr)
 
         self.imgs = imgs
@@ -30,7 +27,7 @@ class Wallpaper:
 class WallpaperTile:
     def __init__(self, x, y, w, h):
         self.rect = pygame.Rect(x, y, w, h)
-        self.status = "b"
+        self.status = "white"
 
     def change_status(self, status: str):
         self.status = status
