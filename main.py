@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 
 blank_surf = pygame.Surface((32, 32))
 blank_surf.fill((255, 248, 231))
-wallpaper = Wallpaper(display, {"b": blank_surf})
+wallpaper = Wallpaper(screen, {"b": blank_surf})
 
 while True:
 
