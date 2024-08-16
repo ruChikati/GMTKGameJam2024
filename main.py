@@ -3,6 +3,8 @@ import sys
 import pygame
 
 display = pygame.display.set_mode((640, 360))
+pygame.display.set_caption("Drawn to Scale")
+
 screen = pygame.Surface((640, 360))
 clock = pygame.time.Clock()
 
