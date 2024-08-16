@@ -1,7 +1,10 @@
 import pygame
 
+import anim
+
+
 class Entity:
-    def __init__(self, x, y, w, h, name, anims):
+    def __init__(self, x: int, y: int, w: int, h: int, name: str, anims: dict[str : anim.Animation]):
         self.x = x
         self.y = y
         self.w = w
@@ -10,5 +13,5 @@ class Entity:
         self.anims = anims
         self.action = "idle"
 
-    def update(self, surf, dt):
-        surf.blit(self.anims[self.action].play(dt))
+    def update(self, surf: pygame.Surface, dt: float):
+        surf.blit(self.anims[self.action].play(dt), (self.x, self.y))
