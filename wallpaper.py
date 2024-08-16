@@ -1,34 +1,31 @@
 import pygame
 
 
+BLANK = (255, 248, 231)
+DIRTY = (100, 100, 100)
+MOSS = (50, 200, 50)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+COMPLETE = (0, 0, 0)
+
+
+class Wallpaper:
+    def __init__(self, surface, wallpaper_tiles):
+        self.screen = surface
+        self.w_tiles = wallpaper_tiles
+
+    def draw(self):
+        for i in range(len(self.w_tiles)):
+            for j in range(len(self.w_tiles[i])):
+                pygame.draw.rect(self.screen, self.w_tiles[i][j].status, self.w_tiles[i][j].rect)
+
+
 class WallpaperTile:
-    def __init__(self, x, y, width, height, tile_size, filename):
+    def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
-        self.image = pygame.image.load(filename)
 
-        self.tile_size = tile_size
+        self.status = BLANK
 
-        self.w_tiles = []
-
-    def load_tiles(self):
-        n = self.rect.width // self.tile_size
-        m = self.rect.height // self.tile_size
-
-        for i in range(n):
-            temp_arr = []
-            for j in range(m):
-                temp_arr.append(
-                    self.image.subsurface(
-                        i * self.rect.width,
-                        j * self.rect.height,
-                        self.rect.width,
-                        self.rect.height,
-                    )
-                )
-
-            self.w_tiles.append(temp_arr)
-
-    def draw(self, surface_coordinate):
-        for i in range(len(self.image)):
-            for j in range(len(self.image[i])):
-                self.screen.blit(self.screen, (i * width + 1, j * height + 1))
+    def draw(self, surface):
+        pygame.draw.rect(screen, self.status, self.rect)
