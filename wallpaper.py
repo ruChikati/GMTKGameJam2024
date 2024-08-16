@@ -5,6 +5,17 @@ class Wallpaper:
     def __init__(self, surf: pygame.Surface, imgs: dict[str : pygame.Surface]):
         self.screen = surf
         self.w_tiles = []
+
+        for i in range(16):
+            temp_arr = []
+            for j in range(16):
+                w = WallpaperTile(i * 32 + 1, j * 32 + 1, 32, 32)
+                #w.status = RED
+                temp_arr.append(
+                    w
+                )
+            self.w_tiles.append(temp_arr)
+
         self.imgs = imgs
 
     def draw(self, scroll: pygame.Vector2):
