@@ -1,3 +1,10 @@
+import os
+
+import pygame
+
+from utils import FileTypeError, LengthError, read_json, sum_list, write_json
+
+
 class Animation:
     def __init__(self, path: str):
         self.path = path
