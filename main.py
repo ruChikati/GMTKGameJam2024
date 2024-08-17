@@ -11,6 +11,7 @@ from wallpaper import Wallpaper
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
 
+
 screen = pygame.Surface((640, 360))
 clock = pygame.time.Clock()
 dt = 1.0
@@ -35,7 +36,7 @@ while True:
 
     dt = (time.time() - last_time) * 60 * 10
     last_time = time.time()
-    print(dt)
+    #print(dt)
     screen.fill((255, 248, 231))
 
     for event in pygame.event.get():
@@ -50,9 +51,14 @@ while True:
                         print("Colour clicked")
 
         if event.type == pygame.MOUSEWHEEL:
-            scroll.y += 5 * event.y
             scroll.x += 5 * event.x * -1
+            scroll.y += 5 * event.y
+            if 640 < scroll.x: scroll.x = 640
+            if 0 > scroll.x: scroll.x = 0
+            if -360 > scroll.y: scroll.y = -360
+            if 0 < scroll.y: scroll.y = 0
 
+    print(scroll)
     wallpaper.draw(scroll)
 
     pygame.draw.rect(screen, (255, 0, 0), (0, 360, 32, 32))
