@@ -20,7 +20,7 @@ class Wallpaper:
             for j in range(len(self.w_tiles[i])):
                 self.screen.blit(
                     self.imgs[self.w_tiles[i][j].status],
-                    self.w_tiles[i][j].rect.topleft + scroll,
+                    self.w_tiles[i][j].rect.topleft - scroll,
                 )
 
 

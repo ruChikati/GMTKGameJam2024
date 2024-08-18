@@ -20,19 +20,12 @@ class Entity:
         self.action = "idle"
         self.surf = surf
 
-    def update(self, dt: float):
+    def update(self, dt: float, scroll: pygame.Vector2):
         self.anims[self.action].play(dt)
-        self.surf.blit(self.anims[self.action].get_img(), self.rect.topleft)
+        self.surf.blit(self.anims[self.action].get_img(), self.rect.topleft - scroll)
 
-    def mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            if self.x - 5 < pos[0] < self.x + 5 and self.y - 5 < pos[1] < self.y + 5:
-                if pygame.mouse.get_pressed()[0]:
-                    return 1 # Right click
-                elif pygame.mouse.get_pressed()[1]:
-                    return -1 # Left click
-        return 0 # No mouse event
+    def move(self, vec: pygame.Vector2):
+        self.rect.topleft += vec
 
     def change_action(self, action: str):
         self.anims[self.action].rewind()
