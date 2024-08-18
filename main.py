@@ -47,8 +47,8 @@ while True:
             if pygame.mouse.get_pressed()[0]:
                 for i in range(16):
                     for j in range(16):
-                        if (wallpaper.w_tiles[i][j].rect.x - 15 < pos.x - scroll.x < wallpaper.w_tiles[i][j].rect.x + 15)\
-                                and (wallpaper.w_tiles[i][j].rect.y - 15 < pos.y + scroll.y < wallpaper.w_tiles[i][j].rect.y + 15):
+                        if (wallpaper.w_tiles[i][j].rect.centerx - 16 <= int(pos.x - scroll.x) <= wallpaper.w_tiles[i][j].rect.centerx + 16)\
+                                and (wallpaper.w_tiles[i][j].rect.centery + 16 <= int(pos.y + scroll.y) <= wallpaper.w_tiles[i][j].rect.centery + 16):
                             print("Tile selected:", i, j)
                             tile_selected = (i, j)
 
