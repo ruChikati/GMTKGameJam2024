@@ -54,8 +54,12 @@ while True:
 
     if scroll.x < -255:
         scroll.x = -255
-    if scroll.x > -65:
-        scroll.x = -65
+    if scroll.x > -70:
+        scroll.x = -70
+    if scroll.y > -103:
+        scroll.y = -103
+    if scroll.y < -512:
+        scroll.y = -512
 
     for event in inputs.get():
         match event.type:
@@ -70,18 +74,30 @@ while True:
             case input.KEYHOLD:
                 match event.key:
                     case input.W:
-                        player.move(pygame.Vector2(0, -speed))
-                        scroll.y += -speed
+                        if player.rect.y > -512:
+                            player.move(pygame.Vector2(0, -speed))
+                            scroll.y += -speed
                     case input.A:
-                        player.move(pygame.Vector2(-speed, 0))
-                        scroll.x += -speed
+                        if player.rect.x > -256:
+                            player.move(pygame.Vector2(-speed, 0))
                     case input.S:
                         if player.rect.y < 16:
                             player.move(pygame.Vector2(0, speed))
                             scroll.y += speed
                     case input.D:
-                        player.move(pygame.Vector2(speed, 0))
-                        scroll.x += speed
+                        if player.rect.x < 240:
+                            player.move(pygame.Vector2(speed, 0))
+
+    if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
+        scroll.x += speed
+    if (
+        player.rect.left - 10 < -screen.get_width() // 2 + scroll.x + 152
+    ):  # - 10 just works, idk why
+        scroll.x += -speed
+    if player.rect.top < screen.get_height() // 2 + scroll.y + 119:
+        scroll.y += -speed
+    if player.rect.bottom > -screen.get_height() // 2 + scroll.y + 119:
+        scroll.y += speed
 
     for pos in floor_tiles:
         screen.blit(floor_surf, pos - scroll)

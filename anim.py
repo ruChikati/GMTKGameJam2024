@@ -61,7 +61,8 @@ class Animation:
         self._calcualate_img()
         return self.frame
 
-    def get_img(self):
+    def get_img(self) -> pygame.Surface:
+        self._calcualate_img()
         return self._img
 
     def rewind(self, index=0):
@@ -74,5 +75,5 @@ class Animation:
         self.paused = False
 
     @property
-    def duration(self):
+    def duration(self) -> int:
         return sum(self.config["frames"])
