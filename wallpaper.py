@@ -2,14 +2,20 @@ import pygame
 
 
 class Wallpaper:
-    def __init__(self, surf: pygame.Surface, imgs: dict[str : pygame.Surface]):
+    def __init__(
+        self,
+        surf: pygame.Surface,
+        imgs: dict[str : pygame.Surface],
+        offset: pygame.Vector2 = pygame.Vector2(0, 0),
+    ):
         self.screen = surf
         self.w_tiles = []
+        self.offset = offset
 
         for i in range(16):
             temp_arr = []
             for j in range(16):
-                w = WallpaperTile(i * 32, j * 32, 32, 32)
+                w = WallpaperTile(i * 32 + offset.x, j * 32 + offset.y, 32, 32)
                 temp_arr.append(w)
             self.w_tiles.append(temp_arr)
 
