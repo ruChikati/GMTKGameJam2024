@@ -19,13 +19,15 @@ class Entity:
         self.anims = anims
         self.action = "idle"
         self.surf = surf
+        self.pos = pygame.Vector2(x, y)
 
     def update(self, dt: float, scroll: pygame.Vector2):
+        self.rect.topleft = self.pos
         self.anims[self.action].play(dt)
         self.surf.blit(self.anims[self.action].get_img(), self.rect.topleft - scroll)
 
     def move(self, vec: pygame.Vector2):
-        self.rect.topleft += vec
+        self.pos += vec
 
     def change_action(self, action: str):
         self.anims[self.action].rewind()

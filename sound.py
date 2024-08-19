@@ -1,5 +1,5 @@
-import random
 import os
+import random
 
 import pygame
 
@@ -9,7 +9,6 @@ pygame.mixer.init()
 
 class SFXManager:
     def __init__(self, num_channels: int = 63):
-        #from .game import SFX_PATH
 
         self.path = f".{os.sep}sounds{os.sep}sfx{os.sep}"
         self.sounds = {}
@@ -35,11 +34,12 @@ class SFXManager:
                 ]
         self.num_channels = num_channels
 
-    def adjust_volume(self, name: str, vol: float): # vol in [0, 1]
+    def adjust_volume(self, name: str, vol: float):  # vol in [0, 1]
         for i in self.sounds[name]:
             i.set_volume(vol)
 
-    def adjust_bgm_volume(self, vol: float):
+    @staticmethod
+    def adjust_bgm_volume(vol: float):
         pygame.mixer.music.set_volume(vol)
 
     def play(self, name: str, loops: int = 0, maxtime: int = 0, fade_ms: int = 0):
