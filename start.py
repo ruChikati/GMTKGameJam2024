@@ -1,16 +1,25 @@
 import importlib
-import sys
+import sys, os
 
 import pygame
 
-import main
+#import main
 from widgets import Button, Label
+from sound import SFXManager
 
 pygame.init()
 (w, h) = (1000, 900)
 screen = pygame.display.set_mode((w, h))
 pygame.display.set_caption("Drawn to scale")
 
+sfxman = SFXManager()
+sfxman.adjust_volume("paint", 0.1)
+sfxman.add_queue(
+    f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}"
+    + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0]
+)
+sfxman.adjust_bgm_volume(0.1)
+sfxman.start_music()
 
 def instructions():
     pygame.init()
@@ -159,9 +168,9 @@ def options():
         100,
         50,
     )
-    if main.sfxman.paused:
+    if sfxman.paused:
         bgm_b.text = "Off"
-    if not main.sfxman.sfx_enabled:
+    if not sfxman.sfx_enabled:
         sfx_b.text = "Off"
 
     while True:
@@ -174,17 +183,17 @@ def options():
         if bgm_b.handle_event(event, pos):
             if bgm_b.text == "On":
                 bgm_b.text = "Off"
-                main.sfxman.pause_music()
+                sfxman.pause_music()
             elif bgm_b.text == "Off":
                 bgm_b.text = "On"
-                main.sfxman.unpause_music()
+                sfxman.unpause_music()
         if sfx_b.handle_event(event, pos):
             if sfx_b.text == "On":
                 sfx_b.text = "Off"
-                main.sfxman.toggle_sound(False)
+                sfxman.toggle_sound(False)
             elif sfx_b.text == "Off":
                 sfx_b.text = "On"
-                main.sfxman.toggle_sound(True)
+                sfxman.toggle_sound(True)
 
         screen.fill((36, 34, 30))
         main_menu_button.render()
@@ -280,44 +289,35 @@ r = Button(
     50,
 )
 
-while True:
-    dt = clock.tick(60)
-    pos = pygame.mouse.get_pos()
-    for event in pygame.event.get():
-        if r.handle_event(event, pos):
-            importlib.reload(main)
-            ret = main.play()
-            if ret == 1:
-                b.text = "Resume"
-            elif ret == 100:
-                l2.text = "Congrats!! You Won!!"
-            screen = pygame.display.set_mode((w, h))
+def start():
+    global screen
+    while True:
+        dt = clock.tick(60)
+        pos = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if r.handle_event(event, pos):
+                screen = pygame.display.set_mode((w, h))
+                return 1
+            if b.handle_event(event, pos):
+                screen = pygame.display.set_mode((w, h))
+                return 1
+            if q.handle_event(event, pos):
+                pygame.quit()
+                sys.exit(0)
+            if i.handle_event(event, pos):
+                instructions()
+            if o.handle_event(event, pos):
+                options()
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
 
-        if b.handle_event(event, pos):
-            ret = main.play()
-            if ret == 1:
-                b.text = "Resume"
-            elif ret == 100:
-                l2.text = "Congrats!! You Won!!"
-            screen = pygame.display.set_mode((w, h))
-
-        if q.handle_event(event, pos):
-            pygame.quit()
-            sys.exit(0)
-        if i.handle_event(event, pos):
-            instructions()
-        if o.handle_event(event, pos):
-            options()
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit(0)
-
-    screen.fill((36, 34, 30))
-    l.render()
-    l2.render()
-    b.render()
-    i.render()
-    o.render()
-    q.render()
-    r.render()
-    pygame.display.update()
+        screen.fill((36, 34, 30))
+        l.render()
+        l2.render()
+        b.render()
+        i.render()
+        o.render()
+        q.render()
+        r.render()
+        pygame.display.update()

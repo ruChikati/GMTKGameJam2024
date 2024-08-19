@@ -10,6 +10,9 @@ from entity import Entity
 from sound import SFXManager
 from wallpaper import Wallpaper
 from zoom_out import ZoomOut
+import start
+
+start.start()
 
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")

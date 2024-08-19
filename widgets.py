@@ -1,23 +1,7 @@
 import pygame
 
-import input
-
-
 class Button:
-    def __init__(
-        self,
-        surface: pygame.Surface,
-        colour: tuple[int, int, int],
-        hover_colour: tuple[int, int, int],
-        click_colour: tuple[int, int, int],
-        font: pygame.font.Font | pygame.font.SysFont,
-        text: str,
-        text_colour: tuple[int, int, int],
-        x: int,
-        y: int,
-        w: int,
-        h: int,
-    ):
+    def __init__(self, surface, colour, hover_colour, click_colour, font, text, text_colour, x, y, width, height):
         self.surface = surface
         self.colour = colour
         self.hover_colour = hover_colour
@@ -26,19 +10,17 @@ class Button:
         self.font = font
         self.text = text
         self.text_colour = text_colour
-        self.rect = pygame.Rect(x, y, w, h)
+        self.rect = pygame.Rect(x, y, width, height)
 
         self.clicked = False
 
-    def handle_event(
-        self, event: input.Event, mousepos: pygame.Vector2
-    ) -> bool:
-        if self.rect.collidepoint(mousepos):
+    def handle_event(self, event, mousepos):
+        if 0 < mousepos[0] - self.rect.x < self.rect.width and 0 < mousepos[1] - self.rect.y < self.rect.height:
             self.render_colour = self.hover_colour
         else:
             self.render_colour = self.colour
-        if event.type == input.MOUSEUP:
-            if self.rect.collidepoint(mousepos):
+        if event.type == pygame.MOUSEBUTTONUP:
+            if 0 < mousepos[0] - self.rect.x < self.rect.width and 0 < mousepos[1] - self.rect.y < self.rect.height:
                 self.clicked = True
                 return True
 
@@ -51,39 +33,17 @@ class Button:
 
         pygame.draw.rect(self.surface, self.render_colour, self.rect)
         size = self.font.size(self.text)
-        self.surface.blit(
-            self.font.render(self.text, True, self.text_colour),
-            (
-                self.rect.x + (self.rect.width / 2) - (size[0] / 2),
-                self.rect.y + (self.rect.height / 2) - (size[1] / 2),
-            ),
-        )
+        self.surface.blit(self.font.render(self.text, True, self.text_colour), (self.rect.x + (self.rect.width/2) - (size[0] / 2), self.rect.y + (self.rect.height/2) - (size[1]/2)))
 
 
 class Label:
-    def __init__(
-        self,
-        surface: pygame.Surface,
-        font: pygame.font.Font | pygame.font.SysFont,
-        text: str,
-        colour: tuple[int, int, int],
-        x: int,
-        y: int,
-        w: int,
-        h: int,
-    ):
+    def __init__(self, surface, font, text, colour, x, y, width, height):
         self.surface = surface
         self.font = font
         self.text = text
         self.colour = colour
-        self.rect = pygame.Rect(x, y, w, h)
+        self.rect = pygame.Rect(x, y, width, height)
 
     def render(self):
         size = self.font.size(self.text)
-        self.surface.blit(
-            self.font.render(self.text, True, self.colour),
-            (
-                self.rect.x + (self.rect.width / 2) - (size[0] / 2),
-                self.rect.y + (self.rect.height / 2) - (size[1] / 2),
-            ),
-        )
+        self.surface.blit(self.font.render(self.text, True, self.colour), (self.rect.x + (self.rect.width / 2) - (size[0] / 2), self.rect.y + (self.rect.height / 2) - (size[1] / 2)))
