@@ -1,9 +1,11 @@
-import sys, os, random
+import os
+import random
+import sys
 
 import pygame
 
-from widgets import Button, Label
 from sound import SFXManager
+from widgets import Button, Label
 
 pygame.init()
 (w, h) = (1000, 900)
@@ -21,6 +23,7 @@ sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
 artwork = random.choice(os.listdir("artworks"))
+
 
 def instructions():
     pygame.init()
@@ -91,7 +94,7 @@ def instructions():
         Label(
             display,
             c_font,
-            "'e' to change paint colour, when directly above the colour palette",
+            "'e' to change paint colour, when directly on the paint",
             (183, 183, 183),
             450,
             750,
@@ -301,6 +304,7 @@ r = Button(
     600,
     50,
 )
+
 
 def start():
     global screen

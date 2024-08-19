@@ -28,7 +28,9 @@ class Button:
 
         self.clicked = False
 
-    def handle_event(self, event: pygame.Event, mousepos: pygame.Vector2) -> bool:
+    def handle_event(
+        self, event: pygame.Event, mousepos: pygame.Vector2 | tuple[int, int]
+    ) -> bool:
         if self.rect.collidepoint(mousepos):
             self.render_colour = self.hover_colour
         else:
