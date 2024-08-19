@@ -67,8 +67,7 @@ def play():
     pos_i = 0
 
     scroll = pygame.Vector2(-152, -119)
-    zoom = pygame.Vector2(0, 0)
-    tile_selected = pygame.Vector2(0, 0)
+    zoom = pygame.Vector2(1, 1)
 
     display = pygame.display.set_mode((1280, 720))
 
@@ -142,8 +141,8 @@ def play():
                                         except IndexError:
                                             pass
                 case input.MOUSEWHEEL:
-                    zoom = pygame.Vector2(event.x, event.y)
-                    print(zoom)
+                    zoom += pygame.Vector2(event.y, event.y) * 0.01
+                    print(event.x)
                     # TODO
 
         if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
@@ -163,7 +162,7 @@ def play():
         player.update(dt, scroll)
         main_menu_button.render() # FIXME not rendering
 
-        display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
+        display.blit(pygame.transform.scale(screen, (zoom.x * display.get_width(), zoom.y * display.get_height())), (0, 0))
         pygame.display.flip()
         clock.tick()
 
