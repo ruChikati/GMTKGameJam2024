@@ -12,6 +12,7 @@ class SFXManager:
         #from .game import SFX_PATH
 
         self.path = f".{os.sep}sounds{os.sep}sfx{os.sep}"
+        self.sound_enabled = True
         self.sounds = {}
         self.music = {}
         self.paused = False
@@ -43,12 +44,16 @@ class SFXManager:
         pygame.mixer.music.set_volume(vol)
 
     def play(self, name: str, loops: int = 0, maxtime: int = 0, fade_ms: int = 0):
-        try:
-            pygame.mixer.find_channel().play(
-                random.choice(self.sounds[name]), loops, maxtime, fade_ms
-            )
-        except (KeyError, AttributeError):
-            pass
+        if self.sound_enabled:
+            try:
+                pygame.mixer.find_channel().play(
+                    random.choice(self.sounds[name]), loops, maxtime, fade_ms
+                )
+            except (KeyError, AttributeError):
+                pass
+
+    def toggle_sound(self, toggle: bool):
+        self.sound_enabled = toggle
 
     def start_music(self):
         if self.queue:
