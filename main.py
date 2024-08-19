@@ -24,6 +24,8 @@ clock = pygame.time.Clock()
 dt = 1.0
 last_time = time.time()
 
+sfxman.adjust_volume("bucket", 0.2)
+
 player = Entity(
     0, 0, 16, 16, "player", {"idle": Animation(f"anims{os.sep}player;idle")}, screen
 )
@@ -134,6 +136,7 @@ while True:
             case input.KEYDOWN:
                 match event.key:
                     case input.E:
+                        c_before = selected_colour + "."
                         colours = list(paint.keys())
                         shuffle(colours)
                         for colour in colours:
@@ -144,21 +147,26 @@ while True:
                                 sfxman.play("bucket")
                                 selected_colour = colour
                                 break
+                        if selected_colour == c_before[:-1]:
+                            selected_colour = ""
                     case input.SPACE:
                         if player.pos.y <= 0:
-                            sfxman.play("paint", 2)
                             for i in range(16):
                                 for j in range(16):
                                     try:
-                                        if player.rect.colliderect(
-                                            wallpaper.w_tiles[i][j].rect
-                                        ):
-                                            wallpaper.w_tiles[i][j].change_status(
-                                                selected_colour
-                                                if selected_colour
-                                                else "white"
+                                        if (
+                                            player.rect.colliderect(
+                                                wallpaper.w_tiles[i][j].rect
                                             )
-                                            break
+                                            and selected_colour
+                                        ):
+                                            if (
+                                                wallpaper.w_tiles[i][j].change_status(
+                                                    selected_colour
+                                                )
+                                                and selected_colour
+                                            ):
+                                                sfxman.play("paint", 2)
                                     except IndexError:
                                         pass
                     case input.RETURN:
