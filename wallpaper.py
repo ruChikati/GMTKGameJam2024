@@ -43,5 +43,8 @@ class WallpaperTile:
         self.rect = pygame.Rect(x, y, w, h)
         self.status = "white"
 
-    def change_status(self, status: str):
+    def change_status(self, status: str) -> bool:
+        if status == self.status:
+            return False
         self.status = status
+        return True

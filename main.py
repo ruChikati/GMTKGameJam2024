@@ -1,15 +1,17 @@
 import os
 import sys
 import time
+from random import shuffle
 
 import pygame
 
 import input
 from anim import Animation
 from entity import Entity
-from sound import SFXManager
+from start import sfxman, start
+# from sound import SFXManager
 from wallpaper import Wallpaper
-from start import start, sfxman
+from zoom_out import ZoomOut
 
 start()
 
@@ -21,6 +23,8 @@ screen = pygame.Surface((320, 180))
 clock = pygame.time.Clock()
 dt = 1.0
 last_time = time.time()
+
+sfxman.adjust_volume("bucket", 0.2)
 
 player = Entity(
     0, 0, 16, 16, "player", {"idle": Animation(f"anims{os.sep}player;idle")}, screen
@@ -67,7 +71,8 @@ paint = {
 
 face_left = False
 
-speed = 1
+speed = 0.5
+gravity = pygame.Vector2(0, 0.25)
 selected_colour = ""
 on_ladder = False  # TODO: add ladder mechanics
 
@@ -96,7 +101,7 @@ scroll = -OFFSET
 
 finished_painting = False
 
-while not finished_painting:
+while True:
 
     dt = time.time() - last_time
     last_time = time.time()
@@ -131,34 +136,41 @@ while not finished_painting:
             case input.KEYDOWN:
                 match event.key:
                     case input.E:
-                        for colour in paint:
+                        c_before = selected_colour + "."
+                        colours = list(paint.keys())
+                        shuffle(colours)
+                        for colour in colours:
                             if (
-                                    paint[colour].rect.colliderect(player.rect)
-                                    and colour != selected_colour
+                                paint[colour].rect.colliderect(player.rect)
+                                and colour != selected_colour
                             ):
                                 sfxman.play("bucket")
                                 selected_colour = colour
                                 break
+                        if selected_colour == c_before[:-1]:
+                            selected_colour = ""
                     case input.SPACE:
                         if player.pos.y <= 0:
-                            sfxman.play("paint", 2)
                             for i in range(16):
                                 for j in range(16):
                                     try:
-                                        if player.rect.colliderect(
+                                        if (
+                                            player.rect.colliderect(
                                                 wallpaper.w_tiles[i][j].rect
-                                        ):
-                                            wallpaper.w_tiles[i][j].change_status(
-                                                selected_colour
-                                                if selected_colour
-                                                else "white"
                                             )
-                                            break
+                                            and selected_colour
+                                        ):
+                                            if (
+                                                wallpaper.w_tiles[i][j].change_status(
+                                                    selected_colour
+                                                )
+                                                and selected_colour
+                                            ):
+                                                sfxman.play("paint", 2)
                                     except IndexError:
                                         pass
                     case input.RETURN:
                         finished_painting = True
-                        break
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += speed
@@ -178,53 +190,26 @@ while not finished_painting:
     if scroll.y < -512:
         scroll.y = -512
 
-    for surf_pos in floor_tiles:
-        screen.blit(surf_pos[1], surf_pos[0] - scroll)
-
-    wallpaper.draw(scroll)
-
-    paint[selected_colour].teleport(player.pos)
     for e in paint.values():
-        if e.name != selected_colour:
-            e.update(dt, scroll)
-    paint[selected_colour].update(dt, scroll)
-    player.update(dt, scroll, face_left=face_left)
-
-    display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
-
-    pygame.display.flip()
-    clock.tick()
-
-zoom = 1
-while finished_painting:
-    dt = time.time() - last_time
-
-    screen.fill((255, 248, 231))
-
-    for event in inputs.get():
-        match event.type:
-            case input.QUIT:
-                pygame.quit()
-                sys.exit()
-            case input.KEYDOWN2:
-                match event.key:
-                    case input.ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-
-    if dt > 0.2:
-        if zoom > 0.1:
-            zoom -= 0.001
-        last_time = time.time()
+        e.move(gravity)
+        if e.pos.y >= 16:
+            e.teleport(pygame.Vector2(e.pos.x, 16))
 
     for surf_pos in floor_tiles:
         screen.blit(surf_pos[1], surf_pos[0] - scroll)
 
-    wallpaper.draw(scroll, zoom)
+    if not finished_painting:
+        wallpaper.draw(scroll)
 
-    scaled_down = pygame.transform.scale(screen, (screen.get_width() * zoom, screen.get_height() * zoom))
+        paint[selected_colour].teleport(player.pos)
+        for e in paint.values():
+            if e.name != selected_colour:
+                e.update(dt, scroll)
+        paint[selected_colour].update(dt, scroll)
+        player.update(dt, scroll, face_left=face_left)
 
-    display.blit(pygame.transform.scale(scaled_down, display.get_size()), scaled_down.get_rect(center=(display.get_width() / 2, display.get_height() / 2)))
-
-    pygame.display.update()
+        display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
+    else:
+        ZoomOut(display, screen, player, wallpaper).draw()
+    pygame.display.flip()
     clock.tick()
