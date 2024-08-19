@@ -55,10 +55,10 @@ class SFXManager:
     def toggle_sound(self, toggle: bool):
         self.sfx_enabled = toggle
 
-    def start_music(self):
+    def start_music(self, repeat: int = -1): # repeat = -1 plays indefinitely
         if self.queue:
             pygame.mixer.music.load(self.queue[0])
-            pygame.mixer.music.play()
+            pygame.mixer.music.play(repeat)
 
     def update(self):
         if not (pygame.mixer.music.get_busy() or self.paused):
