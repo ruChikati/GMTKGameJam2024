@@ -10,13 +10,16 @@ pygame.mixer.init()
 class BGMManager:
     def __init__(self):
         self.path = f".{os.sep}sounds{os.sep}bgm{os.sep}"
-        if len(os.listdir(self.path)) > 0:
+        if len(os.listdir(self.path)) > 1:
             raise IndexError
         else:
-            pygame.mixer.music.load(os.listdir(self.path)[0])
+            pygame.mixer.music.load(self.path + os.sep + os.listdir(self.path)[0])
 
     def play(self):
         pygame.mixer.music.play(-1)
+
+    def adjust_volume(self, vol: float): # vol should be in [0, 1]
+        pygame.mixer.music.set_volume(vol)
 
 
 class SFXManager:
@@ -46,6 +49,10 @@ class SFXManager:
                     if music[0] != "."
                 ]
         self.num_channels = num_channels
+
+    def adjust_volume(self, name: str, vol: float): # vol in [0, 1]
+        for i in self.sounds[name]:
+            i.set_volume(vol)
 
     def play(self, name: str, loops: int = 0, maxtime: int = 0, fade_ms: int = 0):
         try:

@@ -8,6 +8,7 @@ import input
 from anim import Animation
 from entity import Entity
 from wallpaper import Wallpaper
+from sound import SFXManager, BGMManager
 
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
@@ -43,8 +44,14 @@ for i in range(16):
     floor_tiles.append(pygame.Vector2(-256 + 32 * i, 64))
 floor_surf = pygame.image.load(f".{os.sep}tiles{os.sep}brick.png")
 
+sfxman = SFXManager()
+sfxman.adjust_volume("paint", 0.05)
+bgmman = BGMManager()
+bgmman.adjust_volume(0.1)
+bgmman.play()
+
 scroll = pygame.Vector2(-152, -119)
-tile_selected = (0, 0)
+tile_selected = pygame.Vector2(0, 0)
 
 while True:
 
@@ -87,6 +94,11 @@ while True:
                     case input.D:
                         if player.rect.x < 240:
                             player.move(pygame.Vector2(speed, 0))
+                    case input.SPACE:
+                        sfxman.play("paint")
+                        p = pygame.Vector2(scroll.x, scroll.y)
+                        tile_selected = player.rect.topleft - scroll
+                        print(tile_selected)
 
     if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
         scroll.x += speed
@@ -102,6 +114,7 @@ while True:
     for pos in floor_tiles:
         screen.blit(floor_surf, pos - scroll)
     wallpaper.draw(scroll)
+    pygame.draw.rect(screen, (255, 0, 0), (tile_selected[0], tile_selected[1], 32, 32), 1)
     player.update(dt, scroll)
 
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
