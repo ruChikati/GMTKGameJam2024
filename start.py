@@ -81,8 +81,10 @@ def options():
         if sfx_b.handle_event(event, pos):
             if sfx_b.text == "On":
                 sfx_b.text = "Off"
+                main.sfxman.toggle_sound(False)
             elif sfx_b.text == "Off":
                 sfx_b.text = "On"
+                main.sfxman.toggle_sound(True)
 
         screen.fill((36, 34, 30))
         main_menu_button.render()
