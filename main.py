@@ -8,7 +8,7 @@ import input
 from anim import Animation
 from entity import Entity
 from wallpaper import Wallpaper
-from sound import SFXManager, BGMManager
+from sound import SFXManager
 
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
@@ -46,9 +46,9 @@ floor_surf = pygame.image.load(f".{os.sep}tiles{os.sep}brick.png")
 
 sfxman = SFXManager()
 sfxman.adjust_volume("paint", 0.05)
-bgmman = BGMManager()
-bgmman.adjust_volume(0.1)
-bgmman.play()
+sfxman.add_queue(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}" + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0])
+sfxman.adjust_bgm_volume(0.1)
+sfxman.start_music()
 
 scroll = pygame.Vector2(-152, -119)
 tile_selected = pygame.Vector2(0, 0)
