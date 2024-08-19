@@ -210,6 +210,6 @@ while True:
 
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
-        ZoomOut(display, screen, player, wallpaper).draw()
+        ZoomOut(display, screen, player, wallpaper).draw(scroll, floor_tiles)
     pygame.display.flip()
     clock.tick()
