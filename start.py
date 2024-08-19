@@ -291,19 +291,6 @@ q = Button(
     600,
     50,
 )
-r = Button(
-    screen,
-    (180, 20, 10),
-    (180, 80, 10),
-    (10, 75, 20),
-    font,
-    "Replay",
-    (183, 183, 183),
-    200,
-    700,
-    600,
-    50,
-)
 
 
 def start():
@@ -312,10 +299,6 @@ def start():
         dt = clock.tick(60)
         pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
-            if r.handle_event(event, pos):
-                screen = pygame.display.set_mode((w, h))
-                sfxman.play("button")
-                return 1
             if b.handle_event(event, pos):
                 screen = pygame.display.set_mode((w, h))
                 sfxman.play("button")
@@ -342,5 +325,4 @@ def start():
         i.render()
         o.render()
         q.render()
-        r.render()
         pygame.display.update()
