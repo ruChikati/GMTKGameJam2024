@@ -71,10 +71,10 @@ def play():
 
     display = pygame.display.set_mode((1280, 720))
 
-    font = pygame.font.SysFont(None, 30)
-    main_menu_button = Button(display, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Menu", (183, 183, 183),
-                              0 - scroll.x, 0 + scroll.y,
-                              100, 50) # FIXME not rendering
+    font = pygame.font.SysFont(None, 10)
+    main_menu_button = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Menu", (183, 183, 183),
+                              130 - scroll.x, 270 + scroll.y,
+                              32, 16) # FIXME not rendering
 
     running = True
     while running:
@@ -94,7 +94,11 @@ def play():
 
         for event in inputs.get():
             mpos = pygame.mouse.get_pos()
-            if main_menu_button.handle_event(event, mpos):
+            print(mpos, end="\t")
+            print(130 - scroll.x, 270 + scroll.y)
+            cpos = mpos
+            if (1130 <= mpos[0] <= 1225 and 605 <= mpos[1] <= 665) and pygame.mouse.get_pressed()[0]:
+                print("recahed")
                 running = False
             match event.type:
                 case input.QUIT:

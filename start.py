@@ -122,12 +122,16 @@ while True:
                 b.text = "Resume"
             elif ret == 100:
                 l2.text = "Congrats!! You Won!!"
+            screen = pygame.display.set_mode((w, h))
+
         if b.handle_event(event, pos):
             ret = main.play()
             if ret == 1:
                 b.text = "Resume"
             elif ret == 100:
                 l2.text = "Congrats!! You Won!!"
+            screen = pygame.display.set_mode((w, h))
+
         if q.handle_event(event, pos):
             pygame.quit()
             sys.exit(0)
