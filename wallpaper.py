@@ -21,6 +21,9 @@ class Wallpaper:
 
         self.imgs = imgs
 
+    def change_screen(self, surface):
+        self.screen = surface
+
     def draw(self, scroll: pygame.Vector2):
         for i in range(len(self.w_tiles)):
             for j in range(len(self.w_tiles[i])):

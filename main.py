@@ -9,6 +9,7 @@ from anim import Animation
 from entity import Entity
 from sound import SFXManager
 from wallpaper import Wallpaper
+from zoom_out import ZoomOut
 
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
@@ -100,6 +101,8 @@ sfxman.start_music()
 OFFSET = pygame.Vector2(152, 119)
 scroll = -OFFSET
 
+finished_painting = False
+
 while True:
 
     dt = time.time() - last_time
@@ -160,6 +163,8 @@ while True:
                                             break
                                     except IndexError:
                                         pass
+                    case input.RETURN:
+                        finished_painting = True
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += speed
@@ -181,15 +186,19 @@ while True:
 
     for surf_pos in floor_tiles:
         screen.blit(surf_pos[1], surf_pos[0] - scroll)
-    wallpaper.draw(scroll)
 
-    paint[selected_colour].teleport(player.pos)
-    for e in paint.values():
-        if e.name != selected_colour:
-            e.update(dt, scroll)
-    paint[selected_colour].update(dt, scroll)
-    player.update(dt, scroll, face_left=face_left)
+    if not finished_painting:
+        wallpaper.draw(scroll)
 
-    display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
+        paint[selected_colour].teleport(player.pos)
+        for e in paint.values():
+            if e.name != selected_colour:
+                e.update(dt, scroll)
+        paint[selected_colour].update(dt, scroll)
+        player.update(dt, scroll, face_left=face_left)
+
+        display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
+    else:
+        ZoomOut(display, screen, player, wallpaper).draw()
     pygame.display.flip()
     clock.tick()
