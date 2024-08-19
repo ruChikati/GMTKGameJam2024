@@ -59,15 +59,17 @@ sfxman.add_queue(
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
-colours = ["blue", "black", "brick", "cyan", "green", "magenta", "red", "white", "yellow"]
-pos_i = 0
-
-scroll = pygame.Vector2(-152, -119)
-tile_selected = pygame.Vector2(0, 0)
 
 
 def play():
     global last_time, dt, display, screen
+
+    pos_i = 0
+
+    scroll = pygame.Vector2(-152, -119)
+    zoom = pygame.Vector2(0, 0)
+    tile_selected = pygame.Vector2(0, 0)
+
     display = pygame.display.set_mode((1280, 720))
 
     font = pygame.font.SysFont(None, 30)
@@ -135,11 +137,14 @@ def play():
                                     for j in range(16):
                                         try:
                                             if player.rect.colliderect(wallpaper.w_tiles[i][j].rect):
-                                                tile_selected = pygame.Vector2(i, j)
                                                 wallpaper.w_tiles[i][j].change_status(colours[pos_i % len(colours)])
                                                 break
                                         except IndexError:
                                             pass
+                case input.MOUSEWHEEL:
+                    zoom = pygame.Vector2(event.x, event.y)
+                    print(zoom)
+                    # TODO
 
         if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
             scroll.x += speed
