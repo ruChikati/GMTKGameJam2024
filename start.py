@@ -1,9 +1,7 @@
-import importlib
-import sys, os
+import sys, os, random
 
 import pygame
 
-#import main
 from widgets import Button, Label
 from sound import SFXManager
 
@@ -21,6 +19,8 @@ sfxman.add_queue(
 )
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
+
+artwork = random.choice(os.listdir("artworks"))
 
 def instructions():
     pygame.init()
@@ -40,6 +40,11 @@ def instructions():
         100,
         50,
     )
+    artwork_surf = pygame.image.load(f"artworks{os.sep}{artwork}")
+    rect = artwork_surf.get_rect()
+    rect.w /= 5
+    rect.h /= 5
+    artwork_surf = pygame.transform.scale(artwork_surf, (rect.w, rect.h))
     inst = [
         Label(
             display,
@@ -54,7 +59,7 @@ def instructions():
         Label(
             display,
             c_font,
-            "Draw the following artwork.",
+            "Draw the following artwork:",
             (183, 183, 183),
             450,
             300,
@@ -67,7 +72,7 @@ def instructions():
             "You are a small player, whose vision is only limited.",
             (183, 183, 183),
             450,
-            400,
+            550,
             100,
             50,
         ),
@@ -77,19 +82,19 @@ def instructions():
             "You must draw to scale!",
             (183, 183, 183),
             450,
-            450,
+            600,
             100,
             50,
         ),
-        Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 500, 100, 50),
-        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 550, 100, 50),
+        Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 650, 100, 50),
+        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 700, 100, 50),
         Label(
             display,
             c_font,
             "'e' to change paint colour, when directly above the colour palette",
             (183, 183, 183),
             450,
-            600,
+            750,
             100,
             50,
         ),
@@ -105,6 +110,7 @@ def instructions():
             break
 
         display.fill((36, 34, 30))
+        display.blit(artwork_surf, (380, 350))
         main_menu_button.render()
         for i in inst:
             i.render()
