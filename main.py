@@ -50,6 +50,9 @@ sfxman.add_queue(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}" + os.listdir
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
+colours = ["blue", "black", "brick", "cyan", "green", "magenta", "red", "white", "yellow"]
+pos_i = 0
+
 scroll = pygame.Vector2(-152, -119)
 tile_selected = pygame.Vector2(0, 0)
 
@@ -101,9 +104,12 @@ while True:
                                 try:
                                     if player.rect.colliderect(wallpaper.w_tiles[i][j].rect):
                                         tile_selected = pygame.Vector2(i, j)
-                                        del wallpaper.w_tiles[i][j] # TODO: change colour of tile
+                                        wallpaper.w_tiles[i][j].change_status(colours[pos_i % len(colours)])
+                                        break
                                 except IndexError:
                                     pass
+                    case input.RIGHT: pos_i += 1
+                    case input.LEFT: pos_i -= 1
 
     if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
         scroll.x += speed
@@ -119,7 +125,6 @@ while True:
     for pos in floor_tiles:
         screen.blit(floor_surf, pos - scroll)
     wallpaper.draw(scroll)
-    pygame.draw.rect(screen, (255, 0, 0), wallpaper.w_tiles[int(tile_selected.x)][int(tile_selected.y)].rect, 1) ## FIXME: doesnt work
     player.update(dt, scroll)
 
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
