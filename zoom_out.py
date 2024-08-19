@@ -2,7 +2,7 @@ import pygame
 
 
 class ZoomOut:
-    def __init__(self, screen, surface, player, wallpaper):
+    def __init__(self, screen: pygame.Surface, surface: pygame.Surface, player, wallpaper):
         self.screen = screen
         self.surface = surface
         self.zoomed_surface = pygame.Surface(self.screen.get_size())
