@@ -29,6 +29,10 @@ class Entity:
     def move(self, vec: pygame.Vector2):
         self.pos += vec
 
+    def teleport(self, pos: pygame.Vector2):
+        self.pos = pos.copy()
+        self.rect.topleft = self.pos
+
     def change_action(self, action: str):
         self.anims[self.action].rewind()
         self.action = action

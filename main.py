@@ -22,8 +22,47 @@ last_time = time.time()
 player = Entity(
     0, 0, 16, 16, "player", {"idle": Animation(f"anims{os.sep}player;idle")}, screen
 )
+paint = {
+    "red": Entity(
+        -64, 16, 8, 16, "red", {"idle": Animation(f"anims{os.sep}red;idle")}, screen
+    ),
+    "green": Entity(
+        -48, 16, 8, 16, "green", {"idle": Animation(f"anims{os.sep}green;idle")}, screen
+    ),
+    "blue": Entity(
+        -32, 16, 8, 16, "blue", {"idle": Animation(f"anims{os.sep}blue;idle")}, screen
+    ),
+    "cyan": Entity(
+        -16, 16, 8, 16, "cyan", {"idle": Animation(f"anims{os.sep}cyan;idle")}, screen
+    ),
+    "magenta": Entity(
+        0,
+        16,
+        8,
+        16,
+        "magenta",
+        {"idle": Animation(f"anims{os.sep}magenta;idle")},
+        screen,
+    ),
+    "yellow": Entity(
+        16,
+        16,
+        8,
+        16,
+        "yellow",
+        {"idle": Animation(f"anims{os.sep}yellow;idle")},
+        screen,
+    ),
+    "black": Entity(
+        32, 16, 8, 16, "black", {"idle": Animation(f"anims{os.sep}black;idle")}, screen
+    ),
+    "white": Entity(
+        48, 16, 8, 16, "white", {"idle": Animation(f"anims{os.sep}white;idle")}, screen
+    ),
+}
 
 speed = 1
+selected_colour = "blue"
 
 tile_imgs = {}
 for file in os.listdir("tiles"):
@@ -53,19 +92,6 @@ sfxman.add_queue(
 )
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
-
-colours = [
-    "blue",
-    "black",
-    "brick",
-    "cyan",
-    "green",
-    "magenta",
-    "red",
-    "white",
-    "yellow",
-]
-pos_i = 0
 
 OFFSET = pygame.Vector2(152, 119)
 scroll = -OFFSET
@@ -102,14 +128,15 @@ while True:
                             player.move(pygame.Vector2(speed, 0))
             case input.KEYDOWN:
                 match event.key:
-                    case (
-                        input.E
-                    ):  # TODO: make buckets an entity and check for player collision
-                        if player.pos.y >= 0 and -160 <= player.pos.x <= 96:
-                            sfxman.play("bucket")
-                            print(player.pos.x, end=",")
-                            pos_i = (player.pos.x // 32) - 1
-                            print(pos_i)
+                    case input.E:
+                        for colour in paint:
+                            if (
+                                paint[colour].rect.colliderect(player.rect)
+                                and colour != selected_colour
+                            ):
+                                sfxman.play("bucket")
+                                selected_colour = colour
+                                break
                     case input.SPACE:
                         if player.pos.y <= 0:
                             sfxman.play("paint", 2)
@@ -120,7 +147,7 @@ while True:
                                             wallpaper.w_tiles[i][j].rect
                                         ):
                                             wallpaper.w_tiles[i][j].change_status(
-                                                colours[pos_i % len(colours)]
+                                                selected_colour
                                             )
                                             break
                                     except IndexError:
@@ -147,6 +174,10 @@ while True:
     for surf_pos in floor_tiles:
         screen.blit(surf_pos[1], surf_pos[0] - scroll)
     wallpaper.draw(scroll)
+
+    paint[selected_colour].teleport(player.pos)
+    for e in paint.values():
+        e.update(dt, scroll)
     player.update(dt, scroll)
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     pygame.display.flip()
