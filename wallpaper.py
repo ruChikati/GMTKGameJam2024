@@ -24,11 +24,16 @@ class Wallpaper:
     def change_screen(self, surface):
         self.screen = surface
 
-    def draw(self, scroll: pygame.Vector2):
+    def draw(self, scroll: pygame.Vector2, zoom: float=1):
         for i in range(len(self.w_tiles)):
             for j in range(len(self.w_tiles[i])):
                 self.screen.blit(
-                    self.imgs[self.w_tiles[i][j].status],
+                    pygame.transform.scale(
+                        self.imgs[self.w_tiles[i][j].status], (
+                            zoom*self.imgs[self.w_tiles[i][j].status].get_width(),
+                            zoom*self.imgs[self.w_tiles[i][j].status].get_height()
+                        )
+                    ),
                     self.w_tiles[i][j].rect.topleft - scroll,
                 )
 
