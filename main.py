@@ -10,9 +10,9 @@ from entity import Entity
 from sound import SFXManager
 from wallpaper import Wallpaper
 from zoom_out import ZoomOut
-import start
+from start import start, sfxman
 
-start.start()
+start()
 
 display = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Drawn to Scale")
@@ -91,15 +91,6 @@ for i in range(16):
     floor_tiles.append((pygame.Vector2(-256 + 32 * i, 0), floor_surf))
     floor_tiles.append((pygame.Vector2(-256 + 32 * i, 32), floor_surf))
     floor_tiles.append((pygame.Vector2(-256 + 32 * i, 64), floor_surf))
-
-sfxman = SFXManager()
-sfxman.adjust_volume("paint", 0.1)
-sfxman.add_queue(
-    f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}"
-    + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0]
-)
-sfxman.adjust_bgm_volume(0.1)
-sfxman.start_music()
 
 OFFSET = pygame.Vector2(152, 119)
 scroll = -OFFSET
