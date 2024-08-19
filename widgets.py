@@ -31,14 +31,14 @@ class Button:
         self.clicked = False
 
     def handle_event(
-        self, event: input.Event, mousepos: pygame.Vector2, scroll: pygame.Vector2
+        self, event: input.Event, mousepos: pygame.Vector2
     ) -> bool:
-        if self.rect.collidepoint(mousepos + scroll):
+        if self.rect.collidepoint(mousepos):
             self.render_colour = self.hover_colour
         else:
             self.render_colour = self.colour
         if event.type == input.MOUSEUP:
-            if self.rect.collidepoint(mousepos + scroll):
+            if self.rect.collidepoint(mousepos):
                 self.clicked = True
                 return True
 

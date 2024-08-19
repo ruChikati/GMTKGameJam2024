@@ -64,6 +64,7 @@ paint = {
 
 speed = 1
 selected_colour = ""
+on_ladder = False  # TODO: add ladder mechanics
 
 tile_imgs = {}
 for file in os.listdir("tiles"):

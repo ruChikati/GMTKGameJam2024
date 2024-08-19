@@ -14,15 +14,15 @@ pygame.display.set_caption("Drawn to scale")
 
 def instructions():
     pygame.init()
-    screen = pygame.display.set_mode((1000, 900))
-    font = pygame.font.SysFont(None, 30)
+    display = pygame.display.set_mode((1000, 900))
+    c_font = pygame.font.SysFont(None, 30)
 
     main_menu_button = Button(
-        screen,
+        display,
         (180, 20, 10),
         (180, 80, 10),
         (10, 75, 20),
-        font,
+        c_font,
         "Menu",
         (183, 183, 183),
         5,
@@ -32,7 +32,7 @@ def instructions():
     )
     inst = [
         Label(
-            screen,
+            display,
             pygame.font.SysFont(None, 100),
             "Instructions",
             (200, 100, 100),
@@ -42,8 +42,8 @@ def instructions():
             50,
         ),
         Label(
-            screen,
-            font,
+            display,
+            c_font,
             "Draw the following artwork.",
             (183, 183, 183),
             450,
@@ -52,8 +52,8 @@ def instructions():
             50,
         ),
         Label(
-            screen,
-            font,
+            display,
+            c_font,
             "You are a small player, whose vision is only limited.",
             (183, 183, 183),
             450,
@@ -62,13 +62,20 @@ def instructions():
             50,
         ),
         Label(
-            screen, font, "You must draw to scale!", (183, 183, 183), 450, 450, 100, 50
+            display,
+            c_font,
+            "You must draw to scale!",
+            (183, 183, 183),
+            450,
+            450,
+            100,
+            50,
         ),
-        Label(screen, font, "W-A-S-D to move", (183, 183, 183), 450, 500, 100, 50),
-        Label(screen, font, "Space to paint", (183, 183, 183), 450, 550, 100, 50),
+        Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 500, 100, 50),
+        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 550, 100, 50),
         Label(
-            screen,
-            font,
+            display,
+            c_font,
             "'e' to change paint colour, when directly above the colour palette",
             (183, 183, 183),
             450,
@@ -86,7 +93,7 @@ def instructions():
         if event.type == pygame.QUIT:
             break
 
-        screen.fill((36, 34, 30))
+        display.fill((36, 34, 30))
         main_menu_button.render()
         for i in inst:
             i.render()
