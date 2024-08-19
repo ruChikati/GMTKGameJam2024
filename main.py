@@ -59,12 +59,9 @@ sfxman.add_queue(
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
-
-
+pos_i = 0
 def play():
-    global last_time, dt, display, screen
-
-    pos_i = 0
+    global last_time, dt, display, screen, pos_i
 
     scroll = pygame.Vector2(-152, -119)
     zoom = pygame.Vector2(1, 1)

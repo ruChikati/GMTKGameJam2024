@@ -59,10 +59,10 @@ def options():
 
     bgm_b = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "On", (183, 183, 183), 600, 300, 100, 50)
     sfx_b = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "On", (183, 183, 183), 600, 400, 100, 50)
-    '''if not sfx.bgm_on:
+    if main.sfxman.paused:
         bgm_b.text = "Off"
-    if not sfx.sfx_on:
-        sfx_b.text = "Off"'''
+    if not main.sfxman.sfx_enabled:
+        sfx_b.text = "Off"
 
     while True:
         event = pygame.event.wait()
@@ -77,7 +77,7 @@ def options():
                 main.sfxman.pause_music()
             elif bgm_b.text == "Off":
                 bgm_b.text = "On"
-                main.sfxman.start_music()
+                main.sfxman.unpause_music()
         if sfx_b.handle_event(event, pos):
             if sfx_b.text == "On":
                 sfx_b.text = "Off"
