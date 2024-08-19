@@ -8,10 +8,10 @@ import pygame
 import input
 from anim import Animation
 from entity import Entity
-from start import sfxman, start
-# from sound import SFXManager
+from start import sfxman, start, artwork_surf
 from wallpaper import Wallpaper
 from zoom_out import ZoomOut
+from widgets import Button
 
 start()
 
@@ -101,6 +101,12 @@ scroll = -OFFSET
 
 finished_painting = False
 
+font = pygame.font.SysFont(None, 30)
+toggle_img = Button(display, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Toggle Image", (183, 183, 183),
+                              int(-100 - scroll.x), int(150 + scroll.y),
+                              140, 32)
+display_image = False
+
 while True:
 
     dt = time.time() - last_time
@@ -108,6 +114,10 @@ while True:
     screen.fill((255, 248, 231))
 
     for event in inputs.get():
+        mpos = pygame.mouse.get_pos()
+        if (52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61) and pygame.mouse.get_pressed()[0]:
+            print("reached")
+            display_image = not display_image
         match event.type:
             case input.QUIT:
                 pygame.quit()
@@ -183,8 +193,8 @@ while True:
 
     if scroll.x < -255:
         scroll.x = -255
-    if scroll.x > -70:
-        scroll.x = -70
+    if scroll.x > -50:
+        scroll.x = -50
     if scroll.y > -103:
         scroll.y = -103
     if scroll.y < -512:
@@ -211,5 +221,8 @@ while True:
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
         ZoomOut(display, screen, player, wallpaper).draw(scroll, floor_tiles)
+    toggle_img.render()
+    if display_image:
+        display.blit(artwork_surf, (52, 62))
     pygame.display.flip()
     clock.tick()

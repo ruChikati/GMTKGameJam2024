@@ -23,7 +23,11 @@ sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
 artwork = random.choice(os.listdir("artworks"))
-
+artwork_surf = pygame.image.load(f"artworks{os.sep}{artwork}")
+rect = artwork_surf.get_rect()
+rect.w /= 5
+rect.h /= 5
+artwork_surf = pygame.transform.scale(artwork_surf, (rect.w, rect.h))
 
 def instructions():
     pygame.init()
@@ -43,11 +47,6 @@ def instructions():
         100,
         50,
     )
-    artwork_surf = pygame.image.load(f"artworks{os.sep}{artwork}")
-    rect = artwork_surf.get_rect()
-    rect.w /= 5
-    rect.h /= 5
-    artwork_surf = pygame.transform.scale(artwork_surf, (rect.w, rect.h))
     inst = [
         Label(
             display,
@@ -98,6 +97,16 @@ def instructions():
             (183, 183, 183),
             450,
             750,
+            100,
+            50,
+        ),
+        Label(
+            display,
+            c_font,
+            "when you are done, hit enter to see your artwork to compare with the final piece",
+            (183, 183, 183),
+            450,
+            800,
             100,
             50,
         ),
