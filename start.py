@@ -1,16 +1,19 @@
-import importlib
-import sys, os
+import os
+import sys
 
 import pygame
 
-#import main
-from widgets import Button, Label
+import input
 from sound import SFXManager
+# import main
+from widgets import Button, Label
 
 pygame.init()
 (w, h) = (1000, 900)
 screen = pygame.display.set_mode((w, h))
 pygame.display.set_caption("Drawn to scale")
+
+inputs = input.Input()
 
 sfxman = SFXManager()
 sfxman.adjust_volume("paint", 0.1)
@@ -20,6 +23,7 @@ sfxman.add_queue(
 )
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
+
 
 def instructions():
     pygame.init()
@@ -96,7 +100,7 @@ def instructions():
 
     while True:
         event = pygame.event.wait()
-        pos = pygame.mouse.get_pos()
+        pos = pygame.Vector2(pygame.mouse.get_pos())
         if main_menu_button.handle_event(event, pos):
             break
         if event.type == pygame.QUIT:
@@ -175,7 +179,7 @@ def options():
 
     while True:
         event = pygame.event.wait()
-        pos = pygame.mouse.get_pos()
+        pos = pygame.Vector2(pygame.mouse.get_pos())
         if main_menu_button.handle_event(event, pos):
             break
         if event.type == pygame.QUIT:
@@ -289,11 +293,11 @@ r = Button(
     50,
 )
 
-def start():
+
+def start() -> int:
     global screen
     while True:
-        dt = clock.tick(60)
-        pos = pygame.mouse.get_pos()
+        pos = pygame.Vector2(pygame.mouse.get_pos())
         for event in pygame.event.get():
             if r.handle_event(event, pos):
                 screen = pygame.display.set_mode((w, h))

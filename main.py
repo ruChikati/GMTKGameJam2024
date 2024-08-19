@@ -1,16 +1,17 @@
 import os
 import sys
 import time
+from random import shuffle
 
 import pygame
 
 import input
 from anim import Animation
 from entity import Entity
-from sound import SFXManager
+from start import sfxman, start
+# from sound import SFXManager
 from wallpaper import Wallpaper
 from zoom_out import ZoomOut
-from start import start, sfxman
 
 start()
 
@@ -68,7 +69,8 @@ paint = {
 
 face_left = False
 
-speed = 1
+speed = 0.5
+gravity = pygame.Vector2(0, 0.25)
 selected_colour = ""
 on_ladder = False  # TODO: add ladder mechanics
 
@@ -132,7 +134,9 @@ while True:
             case input.KEYDOWN:
                 match event.key:
                     case input.E:
-                        for colour in paint:
+                        colours = list(paint.keys())
+                        shuffle(colours)
+                        for colour in colours:
                             if (
                                 paint[colour].rect.colliderect(player.rect)
                                 and colour != selected_colour
@@ -177,6 +181,11 @@ while True:
         scroll.y = -103
     if scroll.y < -512:
         scroll.y = -512
+
+    for e in paint.values():
+        e.move(gravity)
+        if e.pos.y >= 16:
+            e.teleport(pygame.Vector2(e.pos.x, 16))
 
     for surf_pos in floor_tiles:
         screen.blit(surf_pos[1], surf_pos[0] - scroll)
