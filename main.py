@@ -62,6 +62,8 @@ paint = {
     "": Entity(0, 0, 0, 0, "", {}, screen),
 }
 
+face_left = False
+
 speed = 1
 selected_colour = ""
 on_ladder = False  # TODO: add ladder mechanics
@@ -122,12 +124,14 @@ while True:
                     case input.A:
                         if player.pos.x > -256:
                             player.move(pygame.Vector2(-speed, 0))
+                            face_left = True
                     case input.S:
                         if player.pos.y < 16:
                             player.move(pygame.Vector2(0, speed))
                     case input.D:
                         if player.pos.x < 240:
                             player.move(pygame.Vector2(speed, 0))
+                            face_left = False
             case input.KEYDOWN:
                 match event.key:
                     case input.E:
@@ -184,7 +188,7 @@ while True:
         if e.name != selected_colour:
             e.update(dt, scroll)
     paint[selected_colour].update(dt, scroll)
-    player.update(dt, scroll)
+    player.update(dt, scroll, face_left=face_left)
 
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     pygame.display.flip()
