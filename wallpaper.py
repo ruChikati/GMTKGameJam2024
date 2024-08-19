@@ -34,7 +34,7 @@ class Wallpaper:
                             zoom*self.imgs[self.w_tiles[i][j].status].get_height()
                         )
                     ),
-                    self.w_tiles[i][j].rect.topleft - scroll,
+                    (zoom * (self.w_tiles[i][j].rect.topleft[0]) - scroll[0], zoom * (self.w_tiles[i][j].rect.topleft[1]) - scroll[1])
                 )
 
 

@@ -98,6 +98,7 @@ for i in range(16):
 
 OFFSET = pygame.Vector2(152, 119)
 scroll = -OFFSET
+zoom = 1
 
 finished_painting = False
 
@@ -206,7 +207,7 @@ while True:
             e.teleport(pygame.Vector2(e.pos.x, 16))
 
     for surf_pos in floor_tiles:
-        screen.blit(surf_pos[1], surf_pos[0] - scroll)
+        screen.blit(pygame.transform.scale(surf_pos[1], (zoom * surf_pos[1].get_width(), zoom * surf_pos[1].get_height())), zoom * surf_pos[0] - scroll)
 
     if not finished_painting:
         wallpaper.draw(scroll)
@@ -220,7 +221,15 @@ while True:
 
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
-        ZoomOut(display, screen, player, wallpaper).draw(scroll, floor_tiles)
+        wallpaper.draw(scroll, zoom)
+
+        zoom = 0.5
+        scaled_image = pygame.transform.scale(screen, (zoom * screen.get_width(), zoom * screen.get_height()))
+        display.blit(pygame.transform.scale(scaled_image, display.get_size()), (0, 0))
+        player.update(dt, scroll, face_left=face_left)
+        display_image = True
+
+
     toggle_img.render()
     if display_image:
         display.blit(artwork_surf, (52, 62))
