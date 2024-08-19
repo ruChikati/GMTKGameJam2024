@@ -10,7 +10,6 @@ from anim import Animation
 from entity import Entity
 from start import sfxman, start, artwork_surf
 from wallpaper import Wallpaper
-from zoom_out import ZoomOut
 from widgets import Button
 
 start()
@@ -111,7 +110,8 @@ display_image = False
 while True:
 
     dt = time.time() - last_time
-    last_time = time.time()
+    if not finished_painting:
+        last_time = time.time()
     screen.fill((255, 248, 231))
 
     for event in inputs.get():
@@ -182,6 +182,7 @@ while True:
                                         pass
                     case input.RETURN:
                         finished_painting = True
+                        scroll = -OFFSET
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += speed
@@ -223,7 +224,10 @@ while True:
     else:
         wallpaper.draw(scroll, zoom)
 
-        zoom = 0.5
+        if dt > 0.1 and zoom > 0.5:
+            zoom -= 0.01
+            last_time = time.time()
+
         scaled_image = pygame.transform.scale(screen, (zoom * screen.get_width(), zoom * screen.get_height()))
         display.blit(pygame.transform.scale(scaled_image, display.get_size()), (0, 0))
         player.update(dt, scroll, face_left=face_left)
