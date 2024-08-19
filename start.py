@@ -14,6 +14,7 @@ pygame.display.set_caption("Drawn to scale")
 
 sfxman = SFXManager()
 sfxman.adjust_volume("paint", 0.1)
+sfxman.adjust_volume("button", 0.1)
 sfxman.add_queue(
     f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}"
     + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0]
@@ -98,6 +99,7 @@ def instructions():
         event = pygame.event.wait()
         pos = pygame.mouse.get_pos()
         if main_menu_button.handle_event(event, pos):
+            sfxman.play("button")
             break
         if event.type == pygame.QUIT:
             break
@@ -177,22 +179,27 @@ def options():
         event = pygame.event.wait()
         pos = pygame.mouse.get_pos()
         if main_menu_button.handle_event(event, pos):
+            sfxman.adjust_volume("paint", 0.1)
             break
         if event.type == pygame.QUIT:
             break
         if bgm_b.handle_event(event, pos):
             if bgm_b.text == "On":
                 bgm_b.text = "Off"
+                sfxman.play("button")
                 sfxman.pause_music()
             elif bgm_b.text == "Off":
                 bgm_b.text = "On"
+                sfxman.play("button")
                 sfxman.unpause_music()
         if sfx_b.handle_event(event, pos):
             if sfx_b.text == "On":
                 sfx_b.text = "Off"
+                sfxman.play("button")
                 sfxman.toggle_sound(False)
             elif sfx_b.text == "Off":
                 sfx_b.text = "On"
+                sfxman.play("button")
                 sfxman.toggle_sound(True)
 
         screen.fill((36, 34, 30))
@@ -297,18 +304,24 @@ def start():
         for event in pygame.event.get():
             if r.handle_event(event, pos):
                 screen = pygame.display.set_mode((w, h))
+                sfxman.play("button")
                 return 1
             if b.handle_event(event, pos):
                 screen = pygame.display.set_mode((w, h))
+                sfxman.play("button")
                 return 1
             if q.handle_event(event, pos):
+                sfxman.play("button")
                 pygame.quit()
                 sys.exit(0)
             if i.handle_event(event, pos):
+                sfxman.play("button")
                 instructions()
             if o.handle_event(event, pos):
+                sfxman.play("button")
                 options()
             if event.type == pygame.QUIT:
+                sfxman.play("button")
                 pygame.quit()
                 sys.exit(0)
 
