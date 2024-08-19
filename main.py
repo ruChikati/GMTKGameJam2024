@@ -142,8 +142,6 @@ def play():
                                             pass
                 case input.MOUSEWHEEL:
                     zoom += pygame.Vector2(event.y, event.y) * 0.01
-                    print(event.x)
-                    # TODO
 
         if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
             scroll.x += speed
