@@ -10,6 +10,13 @@ pygame.mixer.init()
 class BGMManager:
     def __init__(self):
         self.path = f".{os.sep}sounds{os.sep}bgm{os.sep}"
+        if len(os.listdir(self.path)) > 0:
+            raise IndexError
+        else:
+            pygame.mixer.music.load(os.listdir(self.path)[0])
+
+    def play(self):
+        pygame.mixer.music.play(-1)
 
 
 class SFXManager:
