@@ -40,13 +40,17 @@ wallpaper = Wallpaper(
 floor_tiles = []
 floor_surf = pygame.image.load(f".{os.sep}tiles{os.sep}brick.png")
 colours = ["blue", "black", "brick", "cyan", "green", "magenta", "red", "white", "yellow"]
+imgb = None
 for i in range(16):
     floor_tiles.append((pygame.Vector2(-256 + 32 * i, 0), floor_surf))
-    floor_tiles.append((pygame.Vector2(-256 + 32 * i, 32), pygame.image.load(f".{os.sep}tiles{os.sep}{colours[i % len(colours)]}.png")))
+    if 12 > i >= 2:
+        imgb = pygame.image.load(f".{os.sep}tiles{os.sep}{colours[i % len(colours)]}.png")
+    else: imgb = floor_surf
+    floor_tiles.append((pygame.Vector2(-256 + 32 * i, 32), imgb))
     floor_tiles.append((pygame.Vector2(-256 + 32 * i, 64), floor_surf))
 
 sfxman = SFXManager()
-sfxman.adjust_volume("paint", 0.05)
+sfxman.adjust_volume("paint", 0.1)
 sfxman.add_queue(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}" + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0])
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
@@ -100,23 +104,24 @@ while True:
                             player.move(pygame.Vector2(speed, 0))
             case input.KEYDOWN:
                 match event.key:
-                    case input.SPACE:
-                        sfxman.play("paint")
-                        if player.rect.y >= 0:
+                    case input.B:
+                        if player.rect.y >= 0 and -160 <= player.rect.x <= 96:
+                            sfxman.play("bucket")
                             print(player.rect.x, end=",")
                             pos_i = (player.rect.x // 32) - 1
                             print(pos_i)
-                        for i in range(16):
-                            for j in range(16):
-                                try:
-                                    if player.rect.colliderect(wallpaper.w_tiles[i][j].rect):
-                                        tile_selected = pygame.Vector2(i, j)
-                                        wallpaper.w_tiles[i][j].change_status(colours[pos_i % len(colours)])
-                                        break
-                                except IndexError:
-                                    pass
-                    case input.RIGHT: pos_i += 1
-                    case input.LEFT: pos_i -= 1
+                    case input.SPACE:
+                        if player.rect.y <= 0:
+                            sfxman.play("paint", 2)
+                            for i in range(16):
+                                for j in range(16):
+                                    try:
+                                        if player.rect.colliderect(wallpaper.w_tiles[i][j].rect):
+                                            tile_selected = pygame.Vector2(i, j)
+                                            wallpaper.w_tiles[i][j].change_status(colours[pos_i % len(colours)])
+                                            break
+                                    except IndexError:
+                                        pass
 
     if player.rect.right > screen.get_width() // 2 + scroll.x + 152:
         scroll.x += speed
