@@ -183,8 +183,8 @@ while True:
 
     if scroll.x < -255:
         scroll.x = -255
-    if scroll.x > -70:
-        scroll.x = -70
+    if scroll.x > -50:
+        scroll.x = -50
     if scroll.y > -103:
         scroll.y = -103
     if scroll.y < -512:
