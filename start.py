@@ -24,9 +24,9 @@ def instructions():
               (183, 183, 183), 450, 300, 100, 50),
         Label(screen, font, "You are a small player, whose vision is only limited.", (183, 183, 183), 450, 400, 100, 50),
         Label(screen, font, "You must draw to scale!", (183, 183, 183), 450, 450, 100, 50),
-        Label(screen, font, "wasd to move", (183, 183, 183), 450, 500, 100, 50),
-        Label(screen, font, "space to deploy paint", (183, 183, 183), 450, 550, 100, 50),
-        Label(screen, font, "where you find the painting palette, press b to change buckets", (183, 183, 183), 450, 600, 100, 50),
+        Label(screen, font, "W-A-S-D to move", (183, 183, 183), 450, 500, 100, 50),
+        Label(screen, font, "Space to paint", (183, 183, 183), 450, 550, 100, 50),
+        Label(screen, font, "'b' to change paint colour, when directly above the colour palette", (183, 183, 183), 450, 600, 100, 50),
     ]
 
     while True:
