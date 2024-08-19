@@ -1,9 +1,10 @@
-import pygame
 import importlib
 import sys
 
-from widgets import Button, Label
+import pygame
+
 import main
+from widgets import Button, Label
 
 pygame.init()
 (w, h) = (1000, 900)
@@ -16,17 +17,65 @@ def instructions():
     screen = pygame.display.set_mode((1000, 900))
     font = pygame.font.SysFont(None, 30)
 
-    main_menu_button = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Menu", (183, 183, 183), 5, 5,
-                              100, 50)
+    main_menu_button = Button(
+        screen,
+        (180, 20, 10),
+        (180, 80, 10),
+        (10, 75, 20),
+        font,
+        "Menu",
+        (183, 183, 183),
+        5,
+        5,
+        100,
+        50,
+    )
     inst = [
-        Label(screen, pygame.font.SysFont(None, 100), "Instructions", (200, 100, 100), 450, 200, 100, 50),
-        Label(screen, font, "Draw the following artwork.",
-              (183, 183, 183), 450, 300, 100, 50),
-        Label(screen, font, "You are a small player, whose vision is only limited.", (183, 183, 183), 450, 400, 100, 50),
-        Label(screen, font, "You must draw to scale!", (183, 183, 183), 450, 450, 100, 50),
+        Label(
+            screen,
+            pygame.font.SysFont(None, 100),
+            "Instructions",
+            (200, 100, 100),
+            450,
+            200,
+            100,
+            50,
+        ),
+        Label(
+            screen,
+            font,
+            "Draw the following artwork.",
+            (183, 183, 183),
+            450,
+            300,
+            100,
+            50,
+        ),
+        Label(
+            screen,
+            font,
+            "You are a small player, whose vision is only limited.",
+            (183, 183, 183),
+            450,
+            400,
+            100,
+            50,
+        ),
+        Label(
+            screen, font, "You must draw to scale!", (183, 183, 183), 450, 450, 100, 50
+        ),
         Label(screen, font, "W-A-S-D to move", (183, 183, 183), 450, 500, 100, 50),
         Label(screen, font, "Space to paint", (183, 183, 183), 450, 550, 100, 50),
-        Label(screen, font, "'b' to change paint colour, when directly above the colour palette", (183, 183, 183), 450, 600, 100, 50),
+        Label(
+            screen,
+            font,
+            "'e' to change paint colour, when directly above the colour palette",
+            (183, 183, 183),
+            450,
+            600,
+            100,
+            50,
+        ),
     ]
 
     while True:
@@ -49,16 +98,60 @@ def options():
     screen = pygame.display.set_mode((1000, 900))
     font = pygame.font.SysFont(None, 30)
 
-    main_menu_button = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Menu", (183, 183, 183), 5, 5,
-                              100, 50)
+    main_menu_button = Button(
+        screen,
+        (180, 20, 10),
+        (180, 80, 10),
+        (10, 75, 20),
+        font,
+        "Menu",
+        (183, 183, 183),
+        5,
+        5,
+        100,
+        50,
+    )
     opts_l = [
-        Label(screen, pygame.font.SysFont(None, 100), "Options", (200, 100, 100), 450, 200, 100, 50),
+        Label(
+            screen,
+            pygame.font.SysFont(None, 100),
+            "Options",
+            (200, 100, 100),
+            450,
+            200,
+            100,
+            50,
+        ),
         Label(screen, font, "Background Music: ", (183, 183, 183), 450, 300, 100, 50),
         Label(screen, font, "SFX: ", (183, 183, 183), 450, 400, 100, 50),
     ]
 
-    bgm_b = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "On", (183, 183, 183), 600, 300, 100, 50)
-    sfx_b = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "On", (183, 183, 183), 600, 400, 100, 50)
+    bgm_b = Button(
+        screen,
+        (180, 20, 10),
+        (180, 80, 10),
+        (10, 75, 20),
+        font,
+        "On",
+        (183, 183, 183),
+        600,
+        300,
+        100,
+        50,
+    )
+    sfx_b = Button(
+        screen,
+        (180, 20, 10),
+        (180, 80, 10),
+        (10, 75, 20),
+        font,
+        "On",
+        (183, 183, 183),
+        600,
+        400,
+        100,
+        50,
+    )
     if main.sfxman.paused:
         bgm_b.text = "Off"
     if not main.sfxman.sfx_enabled:
@@ -103,13 +196,82 @@ except AttributeError:
     clock = pygame.time.Clock()
 
 font = pygame.font.SysFont(None, 30)
-l = Label(screen, pygame.font.SysFont(None, 100), "Drawing to Scale", (200, 100, 100), 450, 150, 100, 50)
+l = Label(
+    screen,
+    pygame.font.SysFont(None, 100),
+    "Drawing to Scale",
+    (200, 100, 100),
+    450,
+    150,
+    100,
+    50,
+)
 l2 = Label(screen, font, "GMTK 2024 Game Jam", (183, 183, 183), 450, 225, 100, 50)
-b = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Play", (183, 183, 183), 200, 300, 600, 50)
-i = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Instructions", (183, 183, 183), 200, 400, 600, 50)
-o = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Options", (183, 183, 183), 200, 500, 600, 50)
-q = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Quit", (183, 183, 183), 200, 600, 600, 50)
-r = Button(screen, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Replay", (183, 183, 183), 200, 700, 600, 50)
+b = Button(
+    screen,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Play",
+    (183, 183, 183),
+    200,
+    300,
+    600,
+    50,
+)
+i = Button(
+    screen,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Instructions",
+    (183, 183, 183),
+    200,
+    400,
+    600,
+    50,
+)
+o = Button(
+    screen,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Options",
+    (183, 183, 183),
+    200,
+    500,
+    600,
+    50,
+)
+q = Button(
+    screen,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Quit",
+    (183, 183, 183),
+    200,
+    600,
+    600,
+    50,
+)
+r = Button(
+    screen,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Replay",
+    (183, 183, 183),
+    200,
+    700,
+    600,
+    50,
+)
 
 while True:
     dt = clock.tick(60)

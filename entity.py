@@ -23,8 +23,11 @@ class Entity:
 
     def update(self, dt: float, scroll: pygame.Vector2):
         self.rect.topleft = self.pos
-        self.anims[self.action].play(dt)
-        self.surf.blit(self.anims[self.action].get_img(), self.rect.topleft - scroll)
+        if self.anims:
+            self.anims[self.action].play(dt)
+            self.surf.blit(
+                self.anims[self.action].get_img(), self.rect.topleft - scroll
+            )
 
     def move(self, vec: pygame.Vector2):
         self.pos += vec

@@ -59,10 +59,11 @@ paint = {
     "white": Entity(
         48, 16, 8, 16, "white", {"idle": Animation(f"anims{os.sep}white;idle")}, screen
     ),
+    "": Entity(0, 0, 0, 0, "", {}, screen),
 }
 
 speed = 1
-selected_colour = "blue"
+selected_colour = ""
 
 tile_imgs = {}
 for file in os.listdir("tiles"):
@@ -148,6 +149,8 @@ while True:
                                         ):
                                             wallpaper.w_tiles[i][j].change_status(
                                                 selected_colour
+                                                if selected_colour
+                                                else "white"
                                             )
                                             break
                                     except IndexError:
@@ -177,8 +180,11 @@ while True:
 
     paint[selected_colour].teleport(player.pos)
     for e in paint.values():
-        e.update(dt, scroll)
+        if e.name != selected_colour:
+            e.update(dt, scroll)
+    paint[selected_colour].update(dt, scroll)
     player.update(dt, scroll)
+
     display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     pygame.display.flip()
     clock.tick()
