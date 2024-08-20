@@ -50,7 +50,7 @@ def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
 start()
 
 display = pygame.display.set_mode((1280, 720))
-pygame.display.set_caption("Drawn to Scale")
+pygame.display.set_caption("Paint to Scale")
 
 inputs = input.Input()
 screen = pygame.Surface((320, 180))

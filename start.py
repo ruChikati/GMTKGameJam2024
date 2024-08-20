@@ -10,11 +10,12 @@ from widgets import Button, Label
 pygame.init()
 (w, h) = (1000, 900)
 screen = pygame.display.set_mode((w, h))
-pygame.display.set_caption("Drawn to scale")
+pygame.display.set_caption("Paint to scale")
 
 sfxman = SFXManager()
 sfxman.adjust_volume("paint", 0.1)
 sfxman.adjust_volume("button", 0.1)
+sfxman.adjust_volume("outro", 0.05)
 sfxman.add_queue(
     f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}"
     + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0]
@@ -270,7 +271,7 @@ font = pygame.font.SysFont(None, 30)
 l = Label(
     screen,
     pygame.font.SysFont(None, 100),
-    "Drawing to Scale",
+    "Paint to Scale",
     (200, 100, 100),
     450,
     150,
