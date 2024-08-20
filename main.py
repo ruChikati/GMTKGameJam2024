@@ -126,6 +126,7 @@ for file in os.listdir("tiles"):
         tile_imgs[file.split(".")[0]] = pygame.image.load(
             "tiles" + os.sep + file
         ).convert()
+coloured = False
 
 wallpaper = Wallpaper(
     screen,
@@ -253,11 +254,13 @@ while True:
                         if on_ladder and player.pos.y >= -16:
                             ladder_selected = not ladder_selected
                     case input.SPACE:
+                        coloured = False
                         if player.pos.y <= 0:
                             for i in range(16):
                                 for j in range(16):
                                     try:
                                         if (
+                                            not coloured and
                                             player.rect.colliderect(
                                                 wallpaper.w_tiles[i][j].rect
                                             )
@@ -270,6 +273,7 @@ while True:
                                                 and selected_colour
                                             ):
                                                 sfxman.play("paint", 2)
+                                                coloured = True
                                     except IndexError:
                                         pass
                     case input.RETURN:
