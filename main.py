@@ -4,13 +4,15 @@ import time
 from random import shuffle
 
 import pygame
+from PIL import Image
 
 import input
 from anim import Animation
 from entity import Entity
-from start import sfxman, start, artwork_surf
+from start import sfxman, start, artwork, artwork_surf
 from wallpaper import Wallpaper
 from widgets import Button
+import image_compare
 
 start()
 
@@ -106,6 +108,8 @@ toggle_img = Button(display, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "
                               int(-100 - scroll.x), int(150 + scroll.y),
                               140, 32)
 display_image = False
+
+score = -1
 
 while True:
 
@@ -238,4 +242,12 @@ while True:
     if display_image:
         display.blit(artwork_surf, (52, 62))
     pygame.display.flip()
+    if finished_painting:
+        if score < -200:
+            pygame.image.save(screen, "screenshot.png")
+            score = image_compare.score(artwork, "screenshot.png")
+            print("score:", score)
+        else:
+            score -= 1
+
     clock.tick()
