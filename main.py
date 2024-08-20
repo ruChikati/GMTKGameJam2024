@@ -150,6 +150,8 @@ while True:
                             face_left = False
             case input.KEYDOWN:
                 match event.key:
+                    case input.Q:
+                        display_image = not display_image
                     case input.E:
                         c_before = selected_colour + "."
                         colours = list(paint.keys())
