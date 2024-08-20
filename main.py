@@ -212,7 +212,7 @@ while True:
             e.teleport(pygame.Vector2(e.pos.x, 16))
 
     for surf_pos in floor_tiles:
-        screen.blit(pygame.transform.scale(surf_pos[1], (zoom * surf_pos[1].get_width(), zoom * surf_pos[1].get_height())), zoom * surf_pos[0] - scroll)
+        screen.blit(pygame.transform.scale(surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())), zoom * surf_pos[0] - scroll)
 
     if not finished_painting:
         wallpaper.draw(scroll)
@@ -237,6 +237,10 @@ while True:
         player.update(dt, scroll, face_left=face_left)
         display_image = True
 
+    for i in range(10):
+        for j in range(5):
+            pygame.draw.line(display, (200, 200, 200), (i*32, 0), (i*32, 180))
+            pygame.draw.line(display, (200, 200, 200), (0, j*32), (320, j*32))
 
     toggle_img.render()
     if display_image:
@@ -244,7 +248,7 @@ while True:
     pygame.display.flip()
     if finished_painting:
         if score < -200:
-            pygame.image.save(screen, "screenshot.png")
+            pygame.image.save(display, "screenshot.png")
             score = image_compare.score(artwork, "screenshot.png")
             print("score:", score)
         else:
