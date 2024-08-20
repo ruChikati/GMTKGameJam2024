@@ -74,7 +74,7 @@ def instructions():
             "You are a small player, whose vision is only limited.",
             (183, 183, 183),
             450,
-            550,
+            500,
             100,
             50,
         ),
@@ -84,16 +84,26 @@ def instructions():
             "You must draw to scale!",
             (183, 183, 183),
             450,
-            600,
+            550,
             100,
             50,
         ),
-        Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 650, 100, 50),
-        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 700, 100, 50),
+        Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 600, 100, 50),
+        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 650, 100, 50),
         Label(
             display,
             c_font,
             "'e' to change paint colour, when directly on the paint",
+            (183, 183, 183),
+            450,
+            700,
+            100,
+            50,
+        ),
+        Label(
+            display,
+            c_font,
+            "'q' to toggle image",
             (183, 183, 183),
             450,
             750,
@@ -103,7 +113,7 @@ def instructions():
         Label(
             display,
             c_font,
-            "when you are done, hit enter to see your artwork to compare with the final piece",
+            "When you are done, hit enter/return to see your artwork to compare with the final piece",
             (183, 183, 183),
             450,
             800,
@@ -122,7 +132,7 @@ def instructions():
             break
 
         display.fill((36, 34, 30))
-        display.blit(artwork_surf, (380, 350))
+        display.blit(artwork_surf, (450, 350))
         main_menu_button.render()
         for i in inst:
             i.render()
