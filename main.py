@@ -217,8 +217,8 @@ while True:
     wallpaper.draw(scroll, zoom)
     for i in range(int(1280/32)):
         for j in range(int(720/32)):
-            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, scroll.y + OFFSET.y), (scroll.x + OFFSET.x + i*32, scroll.x + OFFSET.x + 720))
-            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x, j*32 + scroll.y + OFFSET.y), (scroll.x + OFFSET.x + 1280, scroll.x + OFFSET.x + j*32))
+            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, 0), (scroll.x + OFFSET.x + i*32, 720))  # FIXME
+            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME
 
     if not finished_painting:
         paint[selected_colour].teleport(player.pos)
