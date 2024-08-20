@@ -63,6 +63,15 @@ player = Entity(
     },
     screen,
 )
+ladder = Entity(
+    100,
+    -820,
+    235,
+    600,
+    "ladder",
+    {"idle": Animation(f"anims{os.sep}ladder;idle")},
+    screen
+)
 paint = {
     "red": Entity(
         -64, 16, 8, 16, "red", {"idle": Animation(f"anims{os.sep}red;idle")}, screen
@@ -275,10 +284,6 @@ while True:
         )
 
     wallpaper.draw(scroll, zoom)
-    """for i in range(int(1280/32)):
-        for j in range(int(720/32)):
-            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, 0), (scroll.x + OFFSET.x + i*32, 720))  # FIXME
-            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME"""
 
     if not finished_painting:
         paint[selected_colour].teleport(player.pos)
@@ -287,6 +292,7 @@ while True:
                 e.update(dt, scroll)
         paint[selected_colour].update(dt, scroll)
         player.update(dt, scroll, face_left=face_left)
+        ladder.update(dt, scroll)
 
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
