@@ -110,6 +110,7 @@ toggle_img = Button(display, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "
 display_image = False
 
 score = -1
+screenshot_rect = pygame.Rect(int(400 - OFFSET.x), int(-100 + OFFSET.y), 1000, 650)
 
 while True:
 
@@ -121,7 +122,6 @@ while True:
     for event in inputs.get():
         mpos = pygame.mouse.get_pos()
         if (52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61) and pygame.mouse.get_pressed()[0]:
-            print("reached")
             display_image = not display_image
         match event.type:
             case input.QUIT:
@@ -215,10 +215,10 @@ while True:
         screen.blit(pygame.transform.scale(surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())), zoom * surf_pos[0] - scroll)
 
     wallpaper.draw(scroll, zoom)
-    for i in range(int(1280/32)):
+    '''for i in range(int(1280/32)):
         for j in range(int(720/32)):
             pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, 0), (scroll.x + OFFSET.x + i*32, 720))  # FIXME
-            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME
+            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME'''
 
     if not finished_painting:
         paint[selected_colour].teleport(player.pos)
@@ -239,6 +239,8 @@ while True:
         player.update(dt, scroll, face_left=face_left)
         display_image = True
 
+    if finished_painting:
+        pygame.draw.rect(display, (255, 0, 0), screenshot_rect, 3)
 
     toggle_img.render()
     if display_image:
@@ -246,7 +248,8 @@ while True:
     pygame.display.flip()
     if finished_painting:
         if score < -200:
-            pygame.image.save(display, "screenshot.png")
+            sub = display.subsurface(screenshot_rect)
+            pygame.image.save(sub, "screenshot.png")
             score = image_compare.score(artwork, "screenshot.png")
             print("score:", score)
         else:
