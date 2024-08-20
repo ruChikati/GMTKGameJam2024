@@ -214,9 +214,13 @@ while True:
     for surf_pos in floor_tiles:
         screen.blit(pygame.transform.scale(surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())), zoom * surf_pos[0] - scroll)
 
-    if not finished_painting:
-        wallpaper.draw(scroll)
+    wallpaper.draw(scroll, zoom)
+    for i in range(int(1280/32)):
+        for j in range(int(720/32)):
+            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, scroll.y + OFFSET.y), (scroll.x + OFFSET.x + i*32, scroll.x + OFFSET.x + 720))
+            pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x, j*32 + scroll.y + OFFSET.y), (scroll.x + OFFSET.x + 1280, scroll.x + OFFSET.x + j*32))
 
+    if not finished_painting:
         paint[selected_colour].teleport(player.pos)
         for e in paint.values():
             if e.name != selected_colour:
@@ -226,8 +230,6 @@ while True:
 
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
-        wallpaper.draw(scroll, zoom)
-
         if dt > 0.1 and zoom > 0.5:
             zoom -= 0.01
             last_time = time.time()
@@ -237,10 +239,6 @@ while True:
         player.update(dt, scroll, face_left=face_left)
         display_image = True
 
-    for i in range(10):
-        for j in range(5):
-            pygame.draw.line(display, (200, 200, 200), (i*32, 0), (i*32, 180))
-            pygame.draw.line(display, (200, 200, 200), (0, j*32), (320, j*32))
 
     toggle_img.render()
     if display_image:
