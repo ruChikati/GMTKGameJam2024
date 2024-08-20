@@ -195,6 +195,8 @@ while True:
                     case input.A:
                         if player.pos.x > -256:
                             player.move(pygame.Vector2(-player_speed, 0))
+                            if player.pos.y < 0:
+                                ladder.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
                             player.change_action("walk")
                     case input.S:
@@ -203,6 +205,8 @@ while True:
                     case input.D:
                         if player.pos.x < 240:
                             player.move(pygame.Vector2(player_speed, 0))
+                            if player.pos.y < 0:
+                                ladder.move(pygame.Vector2(player_speed, 0))
                             face_left = False
                             player.change_action("walk")
 
