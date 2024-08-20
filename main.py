@@ -295,7 +295,7 @@ while True:
         if score < -200:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
-            score = evaluate_img(wallpaper, pygame.Surface((16, 16))) # TODO
+            score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
             print("score:", score)
         else:
             score -= 1
