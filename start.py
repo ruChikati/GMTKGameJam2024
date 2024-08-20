@@ -89,7 +89,7 @@ def instructions():
             50,
         ),
         Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 600, 100, 50),
-        Label(display, c_font, "Space to paint", (183, 183, 183), 450, 650, 100, 50),
+        Label(display, c_font, "Space to paint and 'r' to pick-up the ladder", (183, 183, 183), 450, 650, 100, 50),
         Label(
             display,
             c_font,

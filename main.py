@@ -242,7 +242,7 @@ while True:
                         if selected_colour == c_before[:-1]:
                             selected_colour = ""
                     case input.R:
-                        if on_ladder and player.pos.y > -16:
+                        if on_ladder and player.pos.y >= -16:
                             ladder_selected = not ladder_selected
                     case input.SPACE:
                         if player.pos.y <= 0:
