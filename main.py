@@ -53,7 +53,7 @@ sfxman.adjust_volume("bucket", 0.2)
 
 player = Entity(
     0,
-    0,
+    16,
     16,
     16,
     "player",
@@ -65,12 +65,12 @@ player = Entity(
 )
 ladder = Entity(
     100,
-    -820,
-    235,
-    600,
+    -800,
+    32,
+    820,
     "ladder",
     {"idle": Animation(f"anims{os.sep}ladder;idle")},
-    screen
+    screen,
 )
 paint = {
     "red": Entity(
@@ -117,7 +117,8 @@ face_left = False
 player_speed = 0.5
 gravity = pygame.Vector2(0, 0.25)
 selected_colour = ""
-on_ladder = False  # TODO: add ladder mechanics
+on_ladder = False
+ladder_selected = False
 
 tile_imgs = {}
 for file in os.listdir("tiles"):
@@ -163,7 +164,16 @@ display_image = False
 
 score = -1
 screenshot_rect = pygame.Rect(int(400 - OFFSET.x), int(-100 + OFFSET.y), 1000, 650)
-score_l = Label(display, font, "Score: " + str(score), (255, 0, 0), int(200 - OFFSET.x), int(550 + OFFSET.y), 100, 10)
+score_l = Label(
+    display,
+    font,
+    "Score: " + str(score),
+    (255, 0, 0),
+    int(200 - OFFSET.x),
+    int(550 + OFFSET.y),
+    100,
+    10,
+)
 
 while True:
 
@@ -171,6 +181,8 @@ while True:
     if not finished_painting:
         last_time = time.time()
     screen.fill((255, 248, 231))
+
+    on_ladder = player.rect.colliderect(ladder.rect)
 
     for event in inputs.get():
         mpos = pygame.mouse.get_pos()
@@ -190,18 +202,25 @@ while True:
             case input.KEYHOLD:
                 match event.key:
                     case input.W:
-                        if player.pos.y > -512:
+                        if (
+                            player.pos.y > -512 and on_ladder or player.pos.y > -16
+                        ) and not ladder_selected:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
-                        if player.pos.x > -256:
+                        if player.pos.x > -256 and player.pos.y >= -16:
                             player.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
                             player.change_action("walk")
                     case input.S:
-                        if player.pos.y < 16:
+                        if (
+                            player.pos.y < 16
+                            and on_ladder
+                            or player.pos.y >= -16
+                            and not player.pos.y > 16
+                        ) and not ladder_selected:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
-                        if player.pos.x < 240:
+                        if player.pos.x < 240 and player.pos.y >= -16:
                             player.move(pygame.Vector2(player_speed, 0))
                             face_left = False
                             player.change_action("walk")
@@ -222,6 +241,9 @@ while True:
                                 break
                         if selected_colour == c_before[:-1]:
                             selected_colour = ""
+                    case input.R:
+                        if on_ladder and player.pos.y > -16:
+                            ladder_selected = not ladder_selected
                     case input.SPACE:
                         if player.pos.y <= 0:
                             for i in range(16):
@@ -271,9 +293,10 @@ while True:
         scroll.y = -512
 
     for e in paint.values():
-        e.move(gravity)
-        if e.pos.y >= 16:
-            e.teleport(pygame.Vector2(e.pos.x, 16))
+        if e.pos.y < 16:
+            e.move(gravity)
+    if ladder_selected:
+        ladder.teleport(player.pos - pygame.Vector2(0, 816))
 
     for surf_pos in floor_tiles:
         screen.blit(
@@ -291,9 +314,8 @@ while True:
             if e.name != selected_colour:
                 e.update(dt, scroll)
         paint[selected_colour].update(dt, scroll)
-        player.update(dt, scroll, face_left=face_left)
         ladder.update(dt, scroll)
-
+        player.update(dt, scroll, face_left=face_left)
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
         if dt > 0.1 and zoom > 0.5:
@@ -315,12 +337,14 @@ while True:
     toggle_img.render()
     if display_image:
         display.blit(artwork_surf, (52, 62))
+
     pygame.display.flip()
     if finished_painting:
         if score < -200 or score >= 0:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
             score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
-        else: score -= 1
+        else:
+            score -= 1
 
     clock.tick()
