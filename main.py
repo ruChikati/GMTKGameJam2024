@@ -327,8 +327,8 @@ while True:
         player.update(dt, scroll, face_left=face_left)
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
-        if dt > 0.1 and zoom > 0.5:
-            zoom -= 0.01
+        if dt > 0.1 and zoom > 0.4:
+            zoom -= 0.1
             last_time = time.time()
 
         scaled_image = pygame.transform.scale(
