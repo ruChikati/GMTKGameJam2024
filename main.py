@@ -18,14 +18,14 @@ from widgets import Button, Label
 
 def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
     cols = {
-        0xFF0000: "red",
-        0x00FF00: "green",
-        0x0000FF: "blue",
-        0x00FFFF: "cyan",
-        0xFF00FF: "magenta",
-        0xFFFF00: "yellow",
-        0x000000: "black",
-        0xFFFFFF: "white",
+        0xFF0000FF: "red",
+        0x00FF00FF: "green",
+        0x0000FFFF: "blue",
+        0x00FFFFFF: "cyan",
+        0xFF00FFFF: "magenta",
+        0xFFFF00FF: "yellow",
+        0x000000FF: "black",
+        0xFFFFFFFF: "white",
     }
     art_score = 0
     if art_scaled_down.get_size() != (16, 16):
@@ -204,13 +204,19 @@ while True:
                 match event.key:
                     case input.W:
                         if (
-                            player.pos.y > -512 and on_ladder or player.pos.y > -16
-                        ) and not ladder_selected and not finished_painting:
+                            (player.pos.y > -512 and on_ladder or player.pos.y > -16)
+                            and not ladder_selected
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(0, -player_speed))
                         if finished_painting:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
-                        if player.pos.x > -256 and player.pos.y >= -16 and not finished_painting:
+                        if (
+                            player.pos.x > -256
+                            and player.pos.y >= -16
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
                             player.change_action("walk")
@@ -218,16 +224,24 @@ while True:
                             player.move(pygame.Vector2(-player_speed, 0))
                     case input.S:
                         if (
-                            player.pos.y < 16
-                            and on_ladder
-                            or player.pos.y >= -16
-                            and not player.pos.y > 16
-                        ) and not ladder_selected and not finished_painting:
+                            (
+                                player.pos.y < 16
+                                and on_ladder
+                                or player.pos.y >= -16
+                                and not player.pos.y > 16
+                            )
+                            and not ladder_selected
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(0, player_speed))
                         if finished_painting:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
-                        if player.pos.x < 240 and player.pos.y >= -16 and not finished_painting:
+                        if (
+                            player.pos.x < 240
+                            and player.pos.y >= -16
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(player_speed, 0))
                             face_left = False
                             player.change_action("walk")
@@ -260,8 +274,8 @@ while True:
                                 for j in range(16):
                                     try:
                                         if (
-                                            not coloured and
-                                            player.rect.colliderect(
+                                            not coloured
+                                            and player.rect.colliderect(
                                                 wallpaper.w_tiles[i][j].rect
                                             )
                                             and selected_colour
@@ -358,7 +372,8 @@ while True:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
             score = evaluate_img(
-                wallpaper, pygame.image.load(f"artworks{os.sep}to_scale{artwork}")
+                wallpaper,
+                pygame.image.load(f"artworks{os.sep}to_scale{os.sep}{artwork}"),
             )
         else:
             score -= 1
