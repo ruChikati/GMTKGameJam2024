@@ -123,13 +123,23 @@ def instructions():
         Label(
             display,
             c_font,
-            "When you are done, hit enter/return to see your artwork to compare with the final piece",
+            "When you are done, hit enter to compare the artwork to with your piece",
             (183, 183, 183),
             450,
             800,
             100,
             50,
         ),
+        Label(
+            display,
+            c_font,
+            "You will get a score accordingly; the lower the score, the better!",
+            (183, 183, 183),
+            450,
+            850,
+            100,
+            50,
+        )
     ]
 
     while True:
