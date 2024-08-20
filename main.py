@@ -10,7 +10,7 @@ from anim import Animation
 from entity import Entity
 from start import artwork_surf, sfxman, start
 from wallpaper import Wallpaper
-from widgets import Button
+from widgets import Button, Label
 
 
 # from PIL import Image
@@ -145,6 +145,7 @@ display_image = False
 
 score = -1
 screenshot_rect = pygame.Rect(int(400 - OFFSET.x), int(-100 + OFFSET.y), 1000, 650)
+score_l = Label(display, font, "Score: " + str(score), (255, 0, 0), int(200 - OFFSET.x), int(550 + OFFSET.y), 100, 10)
 
 while True:
 
@@ -286,6 +287,8 @@ while True:
 
     if finished_painting:
         pygame.draw.rect(display, (255, 0, 0), screenshot_rect, 3)
+        score_l.text = "Score: " + str(score)
+        score_l.render()
 
     toggle_img.render()
     if display_image:
@@ -296,8 +299,6 @@ while True:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
             score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
-            print("score:", score)
-        else:
-            score -= 1
+        else: score -= 1
 
     clock.tick()
