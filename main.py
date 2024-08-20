@@ -191,6 +191,9 @@ replay = Button(
     32,
 )
 
+
+replay_clicked = False
+
 while True:
 
     dt = time.time() - last_time
@@ -317,9 +320,12 @@ while True:
                         player.change_action("idle")
             case input.MOUSEDOWN:
                 if finished_painting:
-                    if replay.handle_event(event, mpos):
-                        import main
-                        importlib.reload(main)
+                    handle = replay.handle_event(event, mpos, event_handled=True)
+                    print(handle)
+                    if handle:
+                        replay_clicked = True
+                        os.execv(sys.argv[0], sys.argv)
+                        print(True)
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += player_speed

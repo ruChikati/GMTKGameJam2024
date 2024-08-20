@@ -1,4 +1,5 @@
 import pygame
+import input
 
 
 class Button:
@@ -29,13 +30,18 @@ class Button:
         self.clicked = False
 
     def handle_event(
-        self, event: pygame.event, mousepos: pygame.Vector2 | tuple[int, int]
+        self, event: pygame.event, mousepos: pygame.Vector2 | tuple[int, int], event_handled: bool = False
     ) -> bool:
         if self.rect.collidepoint(mousepos):
             self.render_colour = self.hover_colour
         else:
             self.render_colour = self.colour
-        if event.type == pygame.MOUSEBUTTONUP:
+        if not event_handled:
+            if event.type == pygame.MOUSEBUTTONUP or event.type == input.MOUSEUP:
+                if self.rect.collidepoint(mousepos):
+                    self.clicked = True
+                    return True
+        else:
             if self.rect.collidepoint(mousepos):
                 self.clicked = True
                 return True
