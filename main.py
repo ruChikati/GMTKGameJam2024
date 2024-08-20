@@ -117,7 +117,7 @@ face_left = False
 player_speed = 0.5
 gravity = pygame.Vector2(0, 0.25)
 selected_colour = ""
-on_ladder = False  # TODO: add ladder mechanics
+on_ladder = False
 
 tile_imgs = {}
 for file in os.listdir("tiles"):
@@ -172,6 +172,8 @@ while True:
         last_time = time.time()
     screen.fill((255, 248, 231))
 
+    on_ladder = True if player.pos.x - 15 < ladder.pos.x < player.pos.x + 15 else False
+
     for event in inputs.get():
         mpos = pygame.mouse.get_pos()
         if (
@@ -190,7 +192,7 @@ while True:
             case input.KEYHOLD:
                 match event.key:
                     case input.W:
-                        if player.pos.y > -512:
+                        if player.pos.y > -512 and on_ladder:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
                         if player.pos.x > -256:
@@ -200,7 +202,7 @@ while True:
                             face_left = True
                             player.change_action("walk")
                     case input.S:
-                        if player.pos.y < 16:
+                        if player.pos.y < 16 and on_ladder:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
                         if player.pos.x < 240:
