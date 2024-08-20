@@ -204,26 +204,34 @@ while True:
                     case input.W:
                         if (
                             player.pos.y > -512 and on_ladder or player.pos.y > -16
-                        ) and not ladder_selected:
+                        ) and not ladder_selected and not finished_painting:
+                            player.move(pygame.Vector2(0, -player_speed))
+                        if finished_painting:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
-                        if player.pos.x > -256 and player.pos.y >= -16:
+                        if player.pos.x > -256 and player.pos.y >= -16 and not finished_painting:
                             player.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
                             player.change_action("walk")
+                        if finished_painting:
+                            player.move(pygame.Vector2(-player_speed, 0))
                     case input.S:
                         if (
                             player.pos.y < 16
                             and on_ladder
                             or player.pos.y >= -16
                             and not player.pos.y > 16
-                        ) and not ladder_selected:
+                        ) and not ladder_selected and not finished_painting:
+                            player.move(pygame.Vector2(0, player_speed))
+                        if finished_painting:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
-                        if player.pos.x < 240 and player.pos.y >= -16:
+                        if player.pos.x < 240 and player.pos.y >= -16 and not finished_painting:
                             player.move(pygame.Vector2(player_speed, 0))
                             face_left = False
                             player.change_action("walk")
+                        if finished_painting:
+                            player.move(pygame.Vector2(player_speed, 0))
 
             case input.KEYDOWN:
                 match event.key:
@@ -267,6 +275,7 @@ while True:
                     case input.RETURN:
                         finished_painting = True
                         scroll = -OFFSET
+                        player.pos = pygame.Vector2(0, 0)
                     case input.Q:
                         display_image = not display_image
             case input.KEYUP:
@@ -340,6 +349,7 @@ while True:
 
     pygame.display.flip()
     if finished_painting:
+        player_speed = 10
         if score < -200 or score >= 0:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
