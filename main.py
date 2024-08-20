@@ -144,7 +144,6 @@ for i in range(16):
 
 OFFSET = pygame.Vector2(152, 119)
 scroll = -OFFSET
-zoom = 1
 
 finished_painting = False
 
@@ -197,8 +196,7 @@ replay_clicked = False
 while True:
 
     dt = time.time() - last_time
-    if not finished_painting:
-        last_time = time.time()
+    last_time = time.time()
     screen.fill((255, 248, 231))
 
     on_ladder = player.rect.colliderect(ladder.rect)
@@ -354,12 +352,12 @@ while True:
     for surf_pos in floor_tiles:
         screen.blit(
             pygame.transform.scale(
-                surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())
+                surf_pos[1], pygame.Vector2(surf_pos[1].get_size())
             ),
-            zoom * surf_pos[0] - scroll,
+            surf_pos[0] - scroll,
         )
 
-    wallpaper.draw(scroll, zoom)
+    wallpaper.draw(scroll)
 
     if not finished_painting:
         paint[selected_colour].teleport(player.pos)
@@ -371,12 +369,10 @@ while True:
         player.update(dt, scroll, face_left=face_left)
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
-        if dt > 0.1 and zoom > 0.4:
-            zoom -= 0.1
-            last_time = time.time()
+
 
         scaled_image = pygame.transform.scale(
-            screen, (zoom * screen.get_width(), zoom * screen.get_height())
+            screen, (screen.get_width(), screen.get_height())
         )
         display.blit(pygame.transform.scale(scaled_image, display.get_size()), (0, 0))
         player.update(dt, scroll, face_left=face_left)
