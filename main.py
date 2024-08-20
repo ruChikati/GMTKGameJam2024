@@ -8,15 +8,11 @@ import pygame
 import input
 from anim import Animation
 from entity import Entity
-from start import artwork_surf, sfxman, start
+from start import artwork, artwork_surf, sfxman, start
 from wallpaper import Wallpaper
 from widgets import Button, Label
 
-
-# from PIL import Image
-
-
-def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
+'''def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
     cols = {
         0xFF0000: "red",
         0x00FF00: "green",
@@ -35,7 +31,17 @@ def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
             if cols[int(art_scaled_down.get_at((x, y)))] == wp.w_tiles[x][y].status:
                 art_score += 1
 
-    return art_score
+    return art_score'''
+import numpy as np
+from PIL import ImageChops, Image
+
+
+def evaluate_img(artwork, screenshot):
+    size = 500, 500
+    img1 = Image.open(f"artworks{os.sep}{artwork}").convert('RGB').resize(size)
+    img2 = Image.open(screenshot).resize(size)
+    dif = ImageChops.difference(img1, img2)
+    return np.mean(np.array(dif))
 
 
 start()
@@ -187,7 +193,7 @@ while True:
     for event in inputs.get():
         mpos = pygame.mouse.get_pos()
         if (
-            52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61
+                52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61
         ) and pygame.mouse.get_pressed()[0]:
             display_image = not display_image
         match event.type:
@@ -203,7 +209,7 @@ while True:
                 match event.key:
                     case input.W:
                         if (
-                            player.pos.y > -512 and on_ladder or player.pos.y > -16
+                                player.pos.y > -512 and on_ladder or player.pos.y > -16
                         ) and not ladder_selected and not finished_painting:
                             player.move(pygame.Vector2(0, -player_speed))
                         if finished_painting:
@@ -217,10 +223,10 @@ while True:
                             player.move(pygame.Vector2(-player_speed, 0))
                     case input.S:
                         if (
-                            player.pos.y < 16
-                            and on_ladder
-                            or player.pos.y >= -16
-                            and not player.pos.y > 16
+                                player.pos.y < 16
+                                and on_ladder
+                                or player.pos.y >= -16
+                                and not player.pos.y > 16
                         ) and not ladder_selected and not finished_painting:
                             player.move(pygame.Vector2(0, player_speed))
                         if finished_painting:
@@ -241,8 +247,8 @@ while True:
                         shuffle(colours)
                         for colour in colours:
                             if (
-                                paint[colour].rect.colliderect(player.rect)
-                                and colour != selected_colour
+                                    paint[colour].rect.colliderect(player.rect)
+                                    and colour != selected_colour
                             ):
                                 sfxman.play("bucket")
                                 selected_colour = colour
@@ -258,16 +264,16 @@ while True:
                                 for j in range(16):
                                     try:
                                         if (
-                                            player.rect.colliderect(
-                                                wallpaper.w_tiles[i][j].rect
-                                            )
-                                            and selected_colour
-                                        ):
-                                            if (
-                                                wallpaper.w_tiles[i][j].change_status(
-                                                    selected_colour
+                                                player.rect.colliderect(
+                                                    wallpaper.w_tiles[i][j].rect
                                                 )
                                                 and selected_colour
+                                        ):
+                                            if (
+                                                    wallpaper.w_tiles[i][j].change_status(
+                                                        selected_colour
+                                                    )
+                                                    and selected_colour
                                             ):
                                                 sfxman.play("paint", 2)
                                     except IndexError:
@@ -340,7 +346,7 @@ while True:
 
     if finished_painting:
         pygame.draw.rect(display, (255, 0, 0), screenshot_rect, 3)
-        score_l.text = "Score: " + str(score)
+        score_l.text = "Score: " + str(round(score, 2))
         score_l.render()
 
     toggle_img.render()
@@ -353,7 +359,8 @@ while True:
         if score < -200 or score >= 0:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
-            score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
+            # score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
+            score = evaluate_img(artwork, "screenshot.png")
         else:
             score -= 1
 
