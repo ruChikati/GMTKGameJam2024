@@ -203,13 +203,19 @@ while True:
                 match event.key:
                     case input.W:
                         if (
-                            player.pos.y > -512 and on_ladder or player.pos.y > -16
-                        ) and not ladder_selected and not finished_painting:
+                            (player.pos.y > -512 and on_ladder or player.pos.y > -16)
+                            and not ladder_selected
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(0, -player_speed))
                         if finished_painting:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
-                        if player.pos.x > -256 and player.pos.y >= -16 and not finished_painting:
+                        if (
+                            player.pos.x > -256
+                            and player.pos.y >= -16
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
                             player.change_action("walk")
@@ -217,16 +223,24 @@ while True:
                             player.move(pygame.Vector2(-player_speed, 0))
                     case input.S:
                         if (
-                            player.pos.y < 16
-                            and on_ladder
-                            or player.pos.y >= -16
-                            and not player.pos.y > 16
-                        ) and not ladder_selected and not finished_painting:
+                            (
+                                player.pos.y < 16
+                                and on_ladder
+                                or player.pos.y >= -16
+                                and not player.pos.y > 16
+                            )
+                            and not ladder_selected
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(0, player_speed))
                         if finished_painting:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
-                        if player.pos.x < 240 and player.pos.y >= -16 and not finished_painting:
+                        if (
+                            player.pos.x < 240
+                            and player.pos.y >= -16
+                            and not finished_painting
+                        ):
                             player.move(pygame.Vector2(player_speed, 0))
                             face_left = False
                             player.change_action("walk")
@@ -318,12 +332,12 @@ while True:
     wallpaper.draw(scroll, zoom)
 
     if not finished_painting:
+        ladder.update(dt, scroll)
         paint[selected_colour].teleport(player.pos)
         for e in paint.values():
             if e.name != selected_colour:
                 e.update(dt, scroll)
         paint[selected_colour].update(dt, scroll)
-        ladder.update(dt, scroll)
         player.update(dt, scroll, face_left=face_left)
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
     else:
