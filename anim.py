@@ -17,7 +17,7 @@ class Animation:
         except FileNotFoundError:
             self.config = {
                 "frames": [5] * len(self.frame_paths),
-                "speed": 1.0,
+                "player_speed": 1.0,
                 "loop": False,
             }
             write_json(f"{self.path}{os.sep}config.json", self.config)
