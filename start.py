@@ -17,8 +17,7 @@ sfxman.adjust_volume("paint", 0.1)
 sfxman.adjust_volume("button", 0.1)
 sfxman.adjust_volume("outro", 0.05)
 sfxman.add_queue(
-    f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}"
-    + os.listdir(f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}")[0]
+    f".{os.sep}sounds{os.sep}sfx{os.sep}music{os.sep}keys-of-moon-white-petals(chosic.com).mp3"
 )
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
