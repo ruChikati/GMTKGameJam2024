@@ -4,15 +4,39 @@ import time
 from random import shuffle
 
 import pygame
-from PIL import Image
 
 import input
 from anim import Animation
 from entity import Entity
-from start import sfxman, start, artwork, artwork_surf
+from start import artwork_surf, sfxman, start
 from wallpaper import Wallpaper
 from widgets import Button
-import image_compare
+
+
+# from PIL import Image
+
+
+def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
+    cols = {
+        0xFF0000: "red",
+        0x00FF00: "green",
+        0x0000FF: "blue",
+        0x00FFFF: "cyan",
+        0xFF00FF: "magenta",
+        0xFFFF00: "yellow",
+        0x000000: "black",
+        0xFFFFFF: "white",
+    }
+    art_score = 0
+    if art_scaled_down.get_size() != (16, 16):
+        raise ValueError("art file not the correct size")
+    for x in range(16):
+        for y in range(16):
+            if cols[int(art_scaled_down.get_at((x, y)))] == wp.w_tiles[x][y].status:
+                art_score += 1
+
+    return score
+
 
 start()
 
@@ -104,9 +128,19 @@ zoom = 1
 finished_painting = False
 
 font = pygame.font.SysFont(None, 30)
-toggle_img = Button(display, (180, 20, 10), (180, 80, 10), (10, 75, 20), font, "Toggle Image", (183, 183, 183),
-                              int(-100 - scroll.x), int(150 + scroll.y),
-                              140, 32)
+toggle_img = Button(
+    display,
+    (180, 20, 10),
+    (180, 80, 10),
+    (10, 75, 20),
+    font,
+    "Toggle Image",
+    (183, 183, 183),
+    int(-100 - scroll.x),
+    int(150 + scroll.y),
+    140,
+    32,
+)
 display_image = False
 
 score = -1
@@ -121,7 +155,9 @@ while True:
 
     for event in inputs.get():
         mpos = pygame.mouse.get_pos()
-        if (52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61) and pygame.mouse.get_pressed()[0]:
+        if (
+            52 <= mpos[0] <= 190 and 31 <= mpos[1] <= 61
+        ) and pygame.mouse.get_pressed()[0]:
             display_image = not display_image
         match event.type:
             case input.QUIT:
@@ -187,6 +223,8 @@ while True:
                     case input.RETURN:
                         finished_painting = True
                         scroll = -OFFSET
+                    case input.Q:
+                        display_image = not display_image
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += speed
@@ -212,13 +250,18 @@ while True:
             e.teleport(pygame.Vector2(e.pos.x, 16))
 
     for surf_pos in floor_tiles:
-        screen.blit(pygame.transform.scale(surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())), zoom * surf_pos[0] - scroll)
+        screen.blit(
+            pygame.transform.scale(
+                surf_pos[1], zoom * pygame.Vector2(surf_pos[1].get_size())
+            ),
+            zoom * surf_pos[0] - scroll,
+        )
 
     wallpaper.draw(scroll, zoom)
-    '''for i in range(int(1280/32)):
+    """for i in range(int(1280/32)):
         for j in range(int(720/32)):
             pygame.draw.line(screen, (200, 200, 200), (scroll.x + OFFSET.x + i*32, 0), (scroll.x + OFFSET.x + i*32, 720))  # FIXME
-            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME'''
+            pygame.draw.line(screen, (200, 200, 200), (0, j*32 - scroll.y - OFFSET.y), (1280, j*32 - scroll.y - OFFSET.y))  # FIXME"""
 
     if not finished_painting:
         paint[selected_colour].teleport(player.pos)
@@ -234,7 +277,9 @@ while True:
             zoom -= 0.01
             last_time = time.time()
 
-        scaled_image = pygame.transform.scale(screen, (zoom * screen.get_width(), zoom * screen.get_height()))
+        scaled_image = pygame.transform.scale(
+            screen, (zoom * screen.get_width(), zoom * screen.get_height())
+        )
         display.blit(pygame.transform.scale(scaled_image, display.get_size()), (0, 0))
         player.update(dt, scroll, face_left=face_left)
         display_image = True
@@ -250,7 +295,7 @@ while True:
         if score < -200:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
-            score = image_compare.score(artwork, "screenshot.png")
+            score = evaluate_img(wallpaper, pygame.Surface((16, 16))) # TODO
             print("score:", score)
         else:
             score -= 1
