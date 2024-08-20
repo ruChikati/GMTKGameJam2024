@@ -133,7 +133,7 @@ def instructions():
         Label(
             display,
             c_font,
-            "You will get a score accordingly; the lower the score, the better!",
+            "You will get a score accordingly; the higher, the better!",
             (183, 183, 183),
             450,
             850,
