@@ -22,12 +22,13 @@ sfxman.add_queue(
 sfxman.adjust_bgm_volume(0.1)
 sfxman.start_music()
 
-artwork = random.choice(os.listdir("artworks"))
-artwork_surf = pygame.image.load(f"artworks{os.sep}{artwork}")
+artwork = random.choice(os.listdir(f"artworks{os.sep}display"))
+artwork_surf = pygame.image.load(f"artworks{os.sep}display{os.sep}{artwork}")
 rect = artwork_surf.get_rect()
 rect.w /= 5
 rect.h /= 5
 artwork_surf = pygame.transform.scale(artwork_surf, (rect.w, rect.h))
+
 
 def instructions():
     pygame.init()
@@ -89,7 +90,16 @@ def instructions():
             50,
         ),
         Label(display, c_font, "W-A-S-D to move", (183, 183, 183), 450, 600, 100, 50),
-        Label(display, c_font, "Space to paint and 'r' to pick-up the ladder", (183, 183, 183), 450, 650, 100, 50),
+        Label(
+            display,
+            c_font,
+            "Space to paint and 'r' to pick-up the ladder",
+            (183, 183, 183),
+            450,
+            650,
+            100,
+            50,
+        ),
         Label(
             display,
             c_font,

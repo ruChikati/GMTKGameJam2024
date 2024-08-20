@@ -8,7 +8,7 @@ import pygame
 import input
 from anim import Animation
 from entity import Entity
-from start import artwork_surf, sfxman, start
+from start import artwork, artwork_surf, sfxman, start
 from wallpaper import Wallpaper
 from widgets import Button, Label
 
@@ -367,7 +367,9 @@ while True:
         if score < -200 or score >= 0:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
-            score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
+            score = evaluate_img(
+                wallpaper, pygame.image.load(f"artworks{os.sep}to_scale{artwork}")
+            )
         else:
             score -= 1
 
