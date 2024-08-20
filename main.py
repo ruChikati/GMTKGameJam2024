@@ -35,7 +35,7 @@ def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
             if cols[int(art_scaled_down.get_at((x, y)))] == wp.w_tiles[x][y].status:
                 art_score += 1
 
-    return score
+    return art_score
 
 
 start()
@@ -295,7 +295,7 @@ while True:
         display.blit(artwork_surf, (52, 62))
     pygame.display.flip()
     if finished_painting:
-        if score < -200:
+        if score < -200 or score >= 0:
             sub = display.subsurface(screenshot_rect)
             pygame.image.save(sub, "screenshot.png")
             score = evaluate_img(wallpaper, pygame.Surface((16, 16)))  # TODO
