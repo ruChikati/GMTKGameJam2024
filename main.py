@@ -176,23 +176,6 @@ score_l = Label(
     10,
 )
 
-replay = Button(
-    display,
-    (180, 20, 10),
-    (180, 80, 10),
-    (10, 75, 20),
-    font,
-    "Replay",
-    (183, 183, 183),
-    48,
-    575,
-    140,
-    32,
-)
-
-
-replay_clicked = False
-
 while True:
 
     dt = time.time() - last_time
@@ -316,14 +299,6 @@ while True:
                 match event.key:
                     case input.A | input.D:
                         player.change_action("idle")
-            case input.MOUSEDOWN:
-                if finished_painting:
-                    handle = replay.handle_event(event, mpos, event_handled=True)
-                    print(handle)
-                    if handle:
-                        replay_clicked = True
-                        os.execv(sys.argv[0], sys.argv)
-                        print(True)
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
         scroll.x += player_speed
@@ -398,8 +373,6 @@ while True:
             )
         else:
             score -= 1
-
-        replay.render()
 
     pygame.display.flip()
 
