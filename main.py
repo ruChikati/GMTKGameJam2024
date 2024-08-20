@@ -52,7 +52,16 @@ last_time = time.time()
 sfxman.adjust_volume("bucket", 0.2)
 
 player = Entity(
-    0, 0, 16, 16, "player", {"idle": Animation(f"anims{os.sep}player;idle")}, screen
+    0,
+    0,
+    16,
+    16,
+    "player",
+    {
+        "idle": Animation(f"anims{os.sep}player;idle"),
+        "walk": Animation(f"anims{os.sep}player;walk"),
+    },
+    screen,
 )
 paint = {
     "red": Entity(
@@ -96,7 +105,7 @@ paint = {
 
 face_left = False
 
-speed = 0.5
+player_speed = 0.5
 gravity = pygame.Vector2(0, 0.25)
 selected_colour = ""
 on_ladder = False  # TODO: add ladder mechanics
@@ -173,18 +182,21 @@ while True:
                 match event.key:
                     case input.W:
                         if player.pos.y > -512:
-                            player.move(pygame.Vector2(0, -speed))
+                            player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
                         if player.pos.x > -256:
-                            player.move(pygame.Vector2(-speed, 0))
+                            player.move(pygame.Vector2(-player_speed, 0))
                             face_left = True
+                            player.change_action("walk")
                     case input.S:
                         if player.pos.y < 16:
-                            player.move(pygame.Vector2(0, speed))
+                            player.move(pygame.Vector2(0, player_speed))
                     case input.D:
                         if player.pos.x < 240:
-                            player.move(pygame.Vector2(speed, 0))
+                            player.move(pygame.Vector2(player_speed, 0))
                             face_left = False
+                            player.change_action("walk")
+
             case input.KEYDOWN:
                 match event.key:
                     case input.E:
@@ -226,15 +238,19 @@ while True:
                         scroll = -OFFSET
                     case input.Q:
                         display_image = not display_image
+            case input.KEYUP:
+                match event.key:
+                    case input.A | input.D:
+                        player.change_action("idle")
 
     if player.rect.right - scroll.x > screen.get_width() // 2:
-        scroll.x += speed
+        scroll.x += player_speed
     if player.rect.left - scroll.x < screen.get_width() // 2:
-        scroll.x += -speed
+        scroll.x += -player_speed
     if player.rect.top - scroll.y < screen.get_height() // 2:
-        scroll.y += -speed
+        scroll.y += -player_speed
     if player.rect.bottom - scroll.y > screen.get_height() // 2:
-        scroll.y += speed
+        scroll.y += player_speed
 
     if scroll.x < -255:
         scroll.x = -255
