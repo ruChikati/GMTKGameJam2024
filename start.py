@@ -25,8 +25,8 @@ sfxman.start_music()
 artwork = random.choice(os.listdir(f"artworks{os.sep}display"))
 artwork_surf = pygame.image.load(f"artworks{os.sep}display{os.sep}{artwork}")
 rect = artwork_surf.get_rect()
-rect.w /= 5
-rect.h /= 5
+rect.w //= 5
+rect.h //= 5
 artwork_surf = pygame.transform.scale(artwork_surf, (rect.w, rect.h))
 
 
@@ -139,7 +139,7 @@ def instructions():
             850,
             100,
             50,
-        )
+        ),
     ]
 
     while True:

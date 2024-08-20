@@ -1,4 +1,3 @@
-import importlib
 import os
 import sys
 import time
@@ -13,8 +12,16 @@ from start import artwork, artwork_surf, sfxman, start
 from wallpaper import Wallpaper
 from widgets import Button, Label
 
-
-# from PIL import Image
+col_vals = {
+    "white": (255, 255, 255),
+    "black": (0, 0, 0),
+    "red": (255, 0, 0),
+    "green": (0, 255, 0),
+    "blue": (0, 0, 255),
+    "cyan": (0, 255, 255),
+    "magenta": (255, 0, 255),
+    "yellow": (255, 255, 0),
+}
 
 
 def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
@@ -28,6 +35,7 @@ def evaluate_img(wp: Wallpaper, art_scaled_down: pygame.Surface) -> int:
         0x000000FF: "black",
         0xFFFFFFFF: "white",
     }
+
     art_score = 0
     if art_scaled_down.get_size() != (16, 16):
         raise ValueError("art file not the correct size")
@@ -163,8 +171,7 @@ toggle_img = Button(
 )
 display_image = False
 
-score = -1
-screenshot_rect = pygame.Rect(int(400 - OFFSET.x), int(-100 + OFFSET.y), 1000, 650)
+score = 0
 score_l = Label(
     display,
     font,
@@ -208,6 +215,7 @@ while True:
                             and not finished_painting
                         ):
                             player.move(pygame.Vector2(0, -player_speed))
+                            player.change_action("walk")
                         if finished_painting:
                             player.move(pygame.Vector2(0, -player_speed))
                     case input.A:
@@ -233,6 +241,7 @@ while True:
                             and not finished_painting
                         ):
                             player.move(pygame.Vector2(0, player_speed))
+                            player.change_action("walk")
                         if finished_painting:
                             player.move(pygame.Vector2(0, player_speed))
                     case input.D:
@@ -266,6 +275,7 @@ while True:
                     case input.R:
                         if on_ladder and player.pos.y >= -16:
                             ladder_selected = not ladder_selected
+                            sfxman.play("pick_ladder", maxtime=250)
                     case input.SPACE:
                         coloured = False
                         if player.pos.y <= 0:
@@ -291,6 +301,7 @@ while True:
                                         pass
                     case input.RETURN:
                         finished_painting = True
+                        sfxman.play("outro")
                         scroll = -OFFSET
                         player.pos = pygame.Vector2(0, 0)
                     case input.Q:
@@ -326,9 +337,7 @@ while True:
 
     for surf_pos in floor_tiles:
         screen.blit(
-            pygame.transform.scale(
-                surf_pos[1], pygame.Vector2(surf_pos[1].get_size())
-            ),
+            pygame.transform.scale(surf_pos[1], pygame.Vector2(surf_pos[1].get_size())),
             surf_pos[0] - scroll,
         )
 
@@ -343,37 +352,40 @@ while True:
         ladder.update(dt, scroll)
         player.update(dt, scroll, face_left=face_left)
         display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
+        if display_image:
+            display.blit(artwork_surf, (52, 62))
     else:
-
-
-        scaled_image = pygame.transform.scale(
-            screen, (screen.get_width(), screen.get_height())
-        )
-        display.blit(pygame.transform.scale(scaled_image, display.get_size()), (0, 0))
+        display.blit(pygame.transform.scale(screen, display.get_size()), (0, 0))
         player.update(dt, scroll, face_left=face_left)
         display_image = True
-
-    if finished_painting:
-        pygame.draw.rect(display, (255, 0, 0), screenshot_rect, 3)
+        score = evaluate_img(
+            wallpaper, pygame.image.load(f"artworks{os.sep}to_scale{os.sep}{artwork}")
+        )
         score_l.text = "Score: " + str(score)
         score_l.render()
+        display.blit(
+            pygame.transform.scale_by(artwork_surf, 3),
+            (
+                display.get_width() // 4 - artwork_surf.get_width() * 3 // 2,
+                display.get_height() // 2 - artwork_surf.get_height() * 3 // 2,
+            ),
+        )
+        player_art = pygame.Surface((16, 16))
+        for i in range(16):
+            for j in range(16):
+                player_art.set_at((i, j), col_vals[wallpaper.w_tiles[i][j].status])
+        player_art = pygame.transform.scale(
+            player_art, pygame.Vector2(artwork_surf.get_size()) * 3
+        )
+        display.blit(
+            player_art,
+            (
+                display.get_width() * 3 // 4 - player_art.get_width() // 2,
+                display.get_height() // 2 - player_art.get_height() // 2,
+            ),
+        )
 
     toggle_img.render()
-    if display_image:
-        display.blit(artwork_surf, (52, 62))
-
-    if finished_painting:
-        player_speed = 10
-        if score < -200 or score >= 0:
-            sub = display.subsurface(screenshot_rect)
-            pygame.image.save(sub, "screenshot.png")
-            score = evaluate_img(
-                wallpaper,
-                pygame.image.load(f"artworks{os.sep}to_scale{os.sep}{artwork}"),
-            )
-        else:
-            score -= 1
-
     pygame.display.flip()
 
     clock.tick()
